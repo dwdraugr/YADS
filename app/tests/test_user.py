@@ -1,8 +1,13 @@
-import os
-import sys
+# coding=<utf-8>
+import unittest
+import app.core.user as app
 
-import app.core as core
 
-newus = core.User()
+class MyTest(unittest.TestCase):
+    def test_init(self):
+        test = app.User()
 
-print(newus.pictures)
+
+
+if __name__ == '__main__':
+    unittest.main()
