@@ -196,3 +196,8 @@ class User:
                 raise ValueError('User does not have this picture')
         else:
             raise TypeError('Value must be string')
+
+if __name__ == '__main__':
+    a = User()
+    print(hasattr(a, 'age'))
+    print(hasattr(a, 'bibos'))
