@@ -21,7 +21,7 @@ Current prefix for api: `/api/v1.0/`
     + `DELETE` - remove like
 1. `/favorites/ : [GET]` - Get all likes
 1. `/connected/ : [GET]` - Get all connected users
-1. `/search/ : [PUT]` - find users by criteria
+1. `/search/ : [POST]` - find users by criteria
 
     `{`
     

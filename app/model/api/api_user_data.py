@@ -10,7 +10,7 @@ class ApiGetModel(model.Model):
         cursor = self.matchadb.cursor(dictionary=True)
         cursor.execute("SELECT first_name, last_name FROM names WHERE uid = %s;", (uid,))
         data = cursor.fetchone()
-        if len(data) > 0:
+        if data is not None and len(data) > 0:
             return data
         else:
             raise NameError('id not found')
@@ -19,7 +19,7 @@ class ApiGetModel(model.Model):
         cursor = self.matchadb.cursor(dictionary=True)
         cursor.execute("SELECT age FROM options WHERE uid = %s;", (uid,))
         data = cursor.fetchone()
-        if len(data) > 0:
+        if data is not None and len(data) > 0:
             return data
         else:
             raise NameError('id not found')
@@ -28,7 +28,7 @@ class ApiGetModel(model.Model):
         cursor = self.matchadb.cursor(dictionary=True)
         cursor.execute("SELECT gender FROM options WHERE uid = %s;", (uid,))
         data = cursor.fetchone()
-        if len(data) > 0:
+        if data is not None and len(data) > 0:
             return data
         else:
             raise NameError('id not found')
@@ -37,7 +37,7 @@ class ApiGetModel(model.Model):
         cursor = self.matchadb.cursor(dictionary=True)
         cursor.execute("SELECT sex_pref FROM options WHERE uid = %s;", (uid,))
         data = cursor.fetchone()
-        if len(data) > 0:
+        if data is not None and len(data) > 0:
             return data
         else:
             raise NameError('id not found')
@@ -46,7 +46,7 @@ class ApiGetModel(model.Model):
         cursor = self.matchadb.cursor(dictionary=True)
         cursor.execute("SELECT biography FROM biographies WHERE uid = %s;", (uid,))
         data = cursor.fetchone()
-        if len(data) > 0:
+        if data is not None and len(data) > 0:
             return data
         else:
             raise NameError('id not found')
@@ -56,7 +56,7 @@ class ApiGetModel(model.Model):
         cursor.execute("SELECT tag FROM tags WHERE uid = %s;", (uid,))
         data = cursor.fetchall()
         result = list()
-        if len(data):
+        if data is not None and len(data):
             for tag in data:
                 result.append(tag)
             return {'tags': data}
@@ -67,7 +67,7 @@ class ApiGetModel(model.Model):
         cursor = self.matchadb.cursor(dictionary=True)
         cursor.execute("SELECT country, region, city, gps_geo FROM geo WHERE uid = %s;", (uid,))
         data = cursor.fetchone()
-        if len(data) > 0:
+        if data is not None and len(data) > 0:
             return data
         else:
             raise NameError('id not found')
@@ -87,7 +87,7 @@ class ApiGetModel(model.Model):
         cursor = self.matchadb.cursor(dictionary=True)
         cursor.execute("SELECT rating FROM ratings WHERE uid = %s;", (uid,))
         data = cursor.fetchone()
-        if len(data) > 0:
+        if data is not None and len(data) > 0:
             return data
         else:
             raise NameError('id not found')
