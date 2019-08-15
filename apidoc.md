@@ -4,25 +4,15 @@ YADS REST-API documentation
 Current prefix for api: `/api/v1.0/`
 ##### User data:
 1. `/<uid>/: [GET]         ` - Get full profile data
-1. `/<uid>/age : [GET, PUT]    ` - User's age
-1. `/<uid>/gender : [GET, PUT]` - Users' gender
-1. `/<uid>/sex_pref : [GET, PUT]` - User's sex preference
-1. `/<uid>/biography : [GET, PUT]` - User's biography
+1. `/<uid>/age : [GET]    ` - User's age
+1. `/<uid>/gender : [GET]` - Users' gender
+1. `/<uid>/sex_pref : [GET]` - User's sex preference
+1. `/<uid>/biography : [GET]` - User's biography
 1. `/<uid>/tags : [GET]` - Get user's tags
-1. `/<uid>/tags/tag : [GET, PUT, DELETE]`
-    + `GET` - return true if tag exists for this user
-    + `PUT` - add new tag for user
-    + `DELETE` - remove tag for user, if exist
-1. `/<uid>/photos : [GET, PUT]`
-    + `GET` - get a list of links to all profile photos
-    + `PUT` - add a new photo
-1. `/<uid>/photos/<phid> : [GET, DELETE]`
-    + `GET` - get a photo
-    + `DELETE` - delete a photo
-1. `/<uid>/geo : [GET, PUT]`
-    + `GET` - get user's geoposition
-    + `PUT` - set new geoposition
-1. `/<uid>/rating : [GET]`
+1. `/<uid>/geo: [GET]` - Get user's geo
+1. `/<uid>/photos : [GET]` - get a list of links to all profile photos
+1. `/<uid>/rating : [GET]` - get user's rating
+1. `/<uid>/online : [GET]` - get user's online status
 
 #### User action
 1. `/like/<uid> : [GET, PUT, DELETE]`
@@ -31,6 +21,23 @@ Current prefix for api: `/api/v1.0/`
     + `DELETE` - remove like
 1. `/favorites/ : [GET]` - Get all likes
 1. `/connected/ : [GET]` - Get all connected users
+1. `/search/ : [PUT]` - find users by criteria
+
+    `{`
+    
+    `age-min: <int>`
+    
+    `age-max: <int>`
+    
+    `rating-min: <int>`
+    
+    `rating-max: <int>`
+    
+    `geo: <string>`
+    
+    `tags: [tags1, tags2, tags3]`
+    
+    `}`
 
 ## Notice
 Chat system work on WebSocket and not included to API
