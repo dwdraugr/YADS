@@ -1,8 +1,8 @@
 from flask_restful import Resource
-import app.model.api_user_data as api
+import app.model.api.api_user_data as api
 
 
-class UidAll(Resource):
+class UidGet(Resource):
     def __init__(self):
         self.model = api.ApiGetModel()
 
@@ -27,3 +27,5 @@ class UidAll(Resource):
             return self.model.get_user_geo(uid)
         elif data_type == 'online':
             return self.model.get_user_online(uid)
+        elif data_type == 'name':
+            return self.model.get_user_first_last_names(uid)

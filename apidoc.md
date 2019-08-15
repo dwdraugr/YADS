@@ -38,6 +38,9 @@ Current prefix for api: `/api/v1.0/`
     `tags: [tags1, tags2, tags3]`
     
     `}`
+    
+1. `/login : POST`
+1. `/signup: POST`
 
 ## Notice
 Chat system work on WebSocket and not included to API

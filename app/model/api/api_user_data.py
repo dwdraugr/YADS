@@ -6,9 +6,9 @@ class ApiGetModel(model.Model):
     def __init__(self):
         super().__init__()
 
-    def get_user_name(self, uid):
+    def get_user_first_last_names(self, uid):
         cursor = self.matchadb.cursor(dictionary=True)
-        cursor.execute("SELECT username FROM users WHERE id = %s;", (uid,))
+        cursor.execute("SELECT first_name, last_name FROM names WHERE uid = %s;", (uid,))
         data = cursor.fetchone()
         if len(data) > 0:
             return data
