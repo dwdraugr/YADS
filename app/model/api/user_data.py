@@ -81,7 +81,7 @@ class ApiGetModel(model.Model):
                 data.append(tag)
             return {'photos': data}
         else:
-            raise NameError('id not found')
+            return {'error': 'photo not found'}
 
     def get_user_rating(self, uid):
         cursor = self.matchadb.cursor(dictionary=True)

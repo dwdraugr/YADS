@@ -1,5 +1,6 @@
 from flask_restful import Resource
-import app.model.api.api_user_data as api
+from flask import session
+import app.model.api.user_data as api
 import mysql.connector.errors as dberr
 
 
@@ -10,8 +11,19 @@ class UidGet(Resource):
     def get(self, uid, data_type=None):
         try:
             if data_type is None:
-                return {'biba', 'sasiba'}
+                return (
+                    self.model.get_user_age(uid),
+                    self.model.get_user_biography(uid),
+                    self.model.get_user_sex_pref(uid),
+                    self.model.get_user_gender(uid),
+                    self.model.get_user_geo(uid),
+                    self.model.get_user_first_last_names(uid),
+                    self.model.get_user_rating(uid),
+                    self.model.get_user_online(uid),
+                    self.model.get_user_photos(uid)
+                )
             elif data_type == 'age':
+                session['biba'] = 'boba'
                 return self.model.get_user_age(uid)
             elif data_type == 'gender':
                 return self.model.get_user_gender(uid)
