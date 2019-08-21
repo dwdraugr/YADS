@@ -1,6 +1,6 @@
 from flask import Flask, session
 from flask_bootstrap import Bootstrap
-import app.route.app_route as route
+import app.route as route
 import os
 
 template_dir = os.path.abspath('./app/template')

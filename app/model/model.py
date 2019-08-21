@@ -2,7 +2,7 @@ import mysql.connector
 
 
 class Model:
-    def __init__(self):  # TODO вынести параметры отсюда в конфиг
+    def __init__(self):
         self.matchadb = mysql.connector.connect(
             host="192.168.99.100",
             user="root",
@@ -12,4 +12,3 @@ class Model:
             collation='utf8mb4_unicode_ci',
             autocommit=True
         )
-
