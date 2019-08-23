@@ -14,9 +14,13 @@ def init(application):
             return render_template('base.html')
 
     @application.route('/sign_in', methods=['GET'])
-    def sign_in_get():
+    def sign_in_get(message=None, message_type=None):
         form = SignInForm()
-        return render_template('sign_in.html', form=form)
+        if message is None:
+            return render_template('sign_in.html', form=form)
+        else:
+            return render_template('sign_in.html', form=form, message=message,
+                                   message_type=message_type)
 
     @application.route('/sign_in', methods=['POST'])
     def sign_in_post():
@@ -39,7 +43,8 @@ def init(application):
             sign_up = SignUp(application)
             sign_up.sign_up(form.username.data, form.email.data,
                             form.password.data)
-            return redirect('/sign_in')
+            return sign_in_get("Account created! Check you email for confirm it"
+                               , 'alert-success')
         else:
             return render_template('sign_up.html', form=form)
 
@@ -48,3 +53,11 @@ def init(application):
         auth = Auth()
         auth.sign_out()
         return redirect('/')
+
+    @application.route('/confirm/<string:reason>/<string:seed>')
+    def confirm_account(seed, reason='new'):
+        if reason == 'new':
+            Auth().mail_confirm(seed)
+            return sign_in_get("Account confirmed!", "alert-success")
+        else:
+            return '<center><h1>BIBU PASASI</h1></center>'

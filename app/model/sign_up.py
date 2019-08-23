@@ -1,23 +1,19 @@
-from flask import Flask
-
+from app.lazy_async import lazy_async
 from model import Model
-from flask_mail import Mail
-import hashlib, re, os
+from flask_mail import Mail, Message
+from flask import request, render_template
+import hashlib, re, random, string
 
 
 class SignUp(Model):
     def __init__(self, app):
         super(SignUp, self).__init__()
-        app.config.update(
-            MAIL_SERVER='smtp.gmail.com',
-            MAIL_PORT=587,
-            MAIL_USE_TLS=True,
-            MAIL_USERAME=os.environ.get('GMAIL_ADDR'),
-            MAIL_PASSWORD=os.environ.get('GMAIL_PASS')
-        )
         self.mail = Mail(app)
+        self.app = app
 
     def sign_up(self, username, email, password):
+        self._check_email(email)
+        self._check_username(username)
         cursor = self.matchadb.cursor(dictionary=True)
         result = re.fullmatch("^[a-zA-Z][a-zA-Z0-9_]*$", username)
         if not result:
@@ -29,14 +25,41 @@ class SignUp(Model):
         )
         cursor.execute("INSERT INTO users (id, username,"
                        "password, email) VALUE (NULL, %s, %s, %s)", query)
-        self._send_mail(email)
-
-    def _send_mail(self, email):
-        msg = self.mail.send_message(
-            'Tutor mail',
-            sender='kostya.marinenkov@gmail.com',
-            recipients=[email],
-            body='EEEE BOUUUU'
+        new_user = cursor.lastrowid
+        cursor.execute("INSERT INTO confirmed (uid, confirm_email, "
+                       "full_profile, photo_is_available) VALUES (%s, FALSE , "
+                       "FALSE , FALSE )",
+                       (new_user,))
+        query = (
+            new_user,
+            ''.join(random.choice(string.ascii_letters) for i in range(30))
         )
+        cursor.execute("INSERT INTO changes (uid, reason, seed) VALUES (%s, "
+                       "100, %s)", query)
+        self._send_mail(email, query[1])
 
+    def _check_email(self, email):
+        cursor = self.matchadb.cursor(dictionary=True)
+        cursor.execute("SELECT id from users WHERE email = %s", (email,))
+        cursor.fetchone()
+        if cursor.rowcount > 0:
+            raise NameError('User with this email exist')
+
+    def _check_username(self, username):
+        cursor = self.matchadb.cursor(dictionary=True)
+        cursor.execute("SELECT id FROM users WHERE username = %s", (username,))
+        cursor.fetchone()
+        if cursor.rowcount > 0:
+            raise NameError('User with this username exist')
+
+    @lazy_async
+    def _async_mail(self, msg):
+        with self.app.app_context():
+            self.mail.send(msg)
+
+    def _send_mail(self, email, seed):
+        msg = Message('Welcome to the YADS!', [email])
+        link = request.url_root + 'confirm/new/' + seed
+        msg.html = render_template('mail_new_account.html', link=link)
+        self._async_mail(msg)
 

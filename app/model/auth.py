@@ -21,3 +21,16 @@ class Auth(Model):
 
     def sign_out(self):
         session.clear()
+
+    def mail_confirm(self, seed):
+        cursor = self.matchadb.cursor(dictionary=True)
+        cursor.execute(
+            "SELECT uid FROM changes WHERE seed = %s and reason = 100",
+            (seed,))
+        user = cursor.fetchone()
+        if cursor.rowcount <= 0 :
+            raise NameError("Seed not found")
+        cursor.execute("UPDATE confirmed SET confirm_email = TRUE WHERE uid = "
+                       "%s", (user['uid'],))
+        cursor.execute("DELETE FROM changes WHERE uid = %s", (user['uid'],))
+

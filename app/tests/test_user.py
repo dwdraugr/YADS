@@ -61,6 +61,7 @@ sql_creates['changes'] = 'CREATE TABLE IF NOT EXISTS changes(' \
 sql_creates['confirmed'] = 'CREATE TABLE IF NOT EXISTS confirmed(' \
                            'uid INT NOT NULL UNIQUE,' \
                            'confirm_email bool DEFAULT FALSE,' \
+                           'full_profile bool DEFAULT FALSE,' \
                            'photo_is_available bool DEFAULT FALSE);'
 sql_creates['online'] = 'CREATE TABLE IF NOT EXISTS online(' \
                         'uid INT NOT NULL UNIQUE,' \
