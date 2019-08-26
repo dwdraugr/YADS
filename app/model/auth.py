@@ -18,6 +18,16 @@ class Auth(Model):
             session['username'] = result['username']
         else:
             raise NameError('User Not Found')
+        cursor.execute("SELECT confirm_email, full_profile, "
+                       "photo_is_available FROM confirmed WHERE uid = %s",
+                       (session['id'],))
+        result = cursor.fetchone()
+        session['confirm_email'] = result['confirm_email']
+        session['full_profile'] = result['full_profile']
+        session['photo_is_available'] = result['photo_is_available']
+        if session['confirm_email'] == 0:
+            session.clear()
+            raise NameError('User is not confirmed')
 
     def sign_out(self):
         session.clear()
@@ -28,7 +38,7 @@ class Auth(Model):
             "SELECT uid FROM changes WHERE seed = %s and reason = 100",
             (seed,))
         user = cursor.fetchone()
-        if cursor.rowcount <= 0 :
+        if cursor.rowcount <= 0:
             raise NameError("Seed not found")
         cursor.execute("UPDATE confirmed SET confirm_email = TRUE WHERE uid = "
                        "%s", (user['uid'],))

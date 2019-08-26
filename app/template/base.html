@@ -24,10 +24,16 @@
         </nav>
     </div>
 </div>
-{% endblock %}
-
+    {% endblock %}
 {% block content %}
+
     <div class="container">
-        {% block page_content %}{% endblock %}
+        {% block page_content %}
+            {% if message and message_type %}
+        <div class="alert {{ message_type }}" role="alert" style="padding: 1em">
+            {{ message }}
+        </div>
+    {% endif %}
+        {% endblock %}
     </div>
 {% endblock %}
