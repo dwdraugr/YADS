@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, \
-    IntegerField, TextAreaField
+    IntegerField, TextAreaField, SelectMultipleField
 from wtforms.validators import DataRequired, Length
 
 
@@ -19,6 +19,13 @@ class InputInfoForm(FlaskForm):
                                ('getero', 'Geterosexual'),
                                ('gomo', 'Gomosexual'),
                                ('heli', 'Helisexual')
+    ])
+    tags = SelectMultipleField('Tags', choices=[
+        ('hunting', 'Hunting'),
+        ('fishing', 'Fishing'),
+        ('singing', 'Singing'),
+        ('fuck porcupine', 'Fuck porcupine'),
+        ('razvedopros', 'Watching "Разведопрос"')
     ])
     age = IntegerField('Age', [DataRequired()])
     biography = TextAreaField('Enter you biography', [DataRequired(),

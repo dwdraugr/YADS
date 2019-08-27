@@ -8,14 +8,24 @@ from app.model.collect_info import CollectInfo
 
 
 def init(application):
+    @application.before_request
+    def before_request():
+        if 'id' in session and session['full_profile'] == 0 \
+                and request.endpoint != 'input_info':
+            if request.endpoint == 'sign_out':
+                pass
+            else:
+                print('bob')
+                return redirect(url_for('input_info'))
+
     @application.route('/')
     def root(message=None, message_type=None):
         if 'id' in session:
-            return render_template('base.html', name=session['username'],
+            return render_template('main_page.html', name=session['username'],
                                    message=message,
                                    message_type=message_type)
         else:
-            return render_template('base.html', message=message,
+            return render_template('main_page.html', message=message,
                                    message_type=message_type)
 
     @application.route('/sign_in', methods=['GET'])
@@ -33,7 +43,7 @@ def init(application):
     def sign_in_post():
         form = SignInForm()
         if form.validate():
-            Auth().sign_in(form.username.data, form.password.data)
+            Auth(application).sign_in(form.username.data, form.password.data)
             if session['full_profile'] == 0:
                 return redirect(url_for('input_info'))
         else:
@@ -57,15 +67,15 @@ def init(application):
             return render_template('sign_up.html', form=form)
 
     @application.route('/sign_out', methods=['GET'])
-    def sign_out_post():
-        auth = Auth()
+    def sign_out():
+        auth = Auth(application)
         auth.sign_out()
         return redirect('/')
 
     @application.route('/confirm/<string:reason>/<string:seed>')
     def confirm_account(seed, reason='new'):
         if reason == 'new':
-            Auth().mail_confirm(seed)
+            Auth(application).mail_confirm(seed)
             return redirect(url_for('sign_in_get', type='confirmed'))
         else:
             return '<center><h1>BIBU PASASI</h1></center>'
@@ -73,24 +83,28 @@ def init(application):
     @application.route('/info', methods=['GET', 'POST'])
     def input_info():
         form = InputInfoForm()
-        if session['id'] is None:
-            redirect(url_for('sign_in_get'))
+        if 'id' not in session:
+            return redirect(url_for('sign_in_get'))
         if request.method == 'POST':
             if form.validate():
-                info = CollectInfo()
+                info = CollectInfo(application)
+                print(form.tags.data)
+                print(type(form.tags.data))
                 info.collect_all({
                     'uid': session['id'],
-                    'first': request.form['first_name'],
-                    'last': request.form['last_name'],
-                    'gender': request.form['gender'],
-                    'sex_pref': request.form['sex_pref'],
-                    'age': request.form['age'],
-                    'biography': request.form['biography'],
-                    #   'tags': request.form['tags'],
+                    'first': form.first_name.data,
+                    'last': form.last_name.data,
+                    'gender': form.gender.data,
+                    'sex_pref': form.sex_pref.data,
+                    'age': form.age.data,
+                    'biography': form.biography.data,
+                    'tags': form.tags.data,
                     'ip': request.remote_addr
                 })
                 return request.form
             else:
-                return render_template('input_info.html', form=form)
+                return render_template('input_info.html', form=form,
+                                       name=session['username'])
         else:
-            return render_template('input_info.html', form=form)
+            return render_template('input_info.html', form=form,
+                                   name=session['username'])

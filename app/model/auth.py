@@ -40,7 +40,5 @@ class Auth(Model):
         user = cursor.fetchone()
         if cursor.rowcount <= 0:
             raise NameError("Seed not found")
-        cursor.execute("UPDATE confirmed SET confirm_email = TRUE WHERE uid = "
-                       "%s", (user['uid'],))
+        self.change_status(uid=user['uid'], email=1)
         cursor.execute("DELETE FROM changes WHERE uid = %s", (user['uid'],))
-

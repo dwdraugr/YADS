@@ -1,4 +1,4 @@
-from app.lazy_async import lazy_async
+from app.lazy import lazy_async
 from model import Model
 from flask_mail import Mail, Message
 from flask import request, render_template
@@ -6,11 +6,6 @@ import hashlib, re, random, string
 
 
 class SignUp(Model):
-    def __init__(self, app):
-        super(SignUp, self).__init__()
-        self.mail = Mail(app)
-        self.app = app
-
     def sign_up(self, username, email, password):
         self._check_email(email)
         self._check_username(username)
@@ -36,7 +31,11 @@ class SignUp(Model):
         )
         cursor.execute("INSERT INTO changes (uid, reason, seed) VALUES (%s, "
                        "100, %s)", query)
-        self._send_mail(email, query[1])
+
+        msg = Message('Welcome to the YADS!', [email])
+        link = request.url_root + 'confirm/new/' + query[1]
+        msg.html = render_template('mail_new_account.html', link=link)
+        self._send_mail(msg)
 
     def _check_email(self, email):
         cursor = self.matchadb.cursor(dictionary=True)
@@ -51,15 +50,4 @@ class SignUp(Model):
         cursor.fetchone()
         if cursor.rowcount > 0:
             raise NameError('User with this username exist')
-
-    @lazy_async
-    def _async_mail(self, msg):
-        with self.app.app_context():
-            self.mail.send(msg)
-
-    def _send_mail(self, email, seed):
-        msg = Message('Welcome to the YADS!', [email])
-        link = request.url_root + 'confirm/new/' + seed
-        msg.html = render_template('mail_new_account.html', link=link)
-        self._async_mail(msg)
 

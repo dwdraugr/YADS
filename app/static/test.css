@@ -1,0 +1,9 @@
+img{
+ max-width: 100%;
+ height: auto;
+ display: block;
+}
+
+body {
+ background: rgb(240, 240, 240);
+}

@@ -3,9 +3,6 @@ import hashlib
 
 
 class UserAuth(model.Model):
-    def __init__(self):
-        super().__init__()
-
     def login(self, username, password):
         cursor = self.matchadb.cursor(dictionary=True)
         query = (

@@ -1,6 +1,6 @@
 import mysql.connector as sql
 import requests
-
+from flask import session
 from app.model.model import Model
 
 
@@ -11,8 +11,14 @@ class CollectInfo(Model):
                               data['sex_pref'], data['age'])
         self._collect_biography(data['uid'], data['biography'])
         self._collect_geo_ip(data['uid'], data['ip'])
+        print(data['tags'])
         self._collect_tags(data['uid'], data['tags'])
         self._create_rating(data['uid'])
+
+        cursor = self.matchadb.cursor()
+        cursor.execute("UPDATE confirmed SET full_profile = 1 WHERE uid = %s",
+                       (data['uid'],))
+        session['full_profile'] = 1
 
     def _collect_names(self, uid, first, last):
         cursor = self.matchadb.cursor()
@@ -35,13 +41,12 @@ class CollectInfo(Model):
         if cursor.rowcount == 0:
             raise sql.errors.Error('Unable to write in database')
 
-    def _collect_geo_ip(self, uid, ip): # TODO: Fix TypeError with try
+    def _collect_geo_ip(self, uid, ip):  # TODO: Fix TypeError with try
         request_str = self._get_geo_address(ip)
         response = requests.get(request_str)
         json = response.json()
-        if json is not None:
-            cursor = self.matchadb.cursor()
-            print(json)
+        cursor = self.matchadb.cursor()
+        try:
             cursor.execute("INSERT INTO geo "
                            "(uid, country, region, city, gps_geo)"
                            "VALUES (%s, %s, %s, %s, %s)",
@@ -50,8 +55,15 @@ class CollectInfo(Model):
                             json['latitude'] + ';' + json['longitude']))
             if cursor.rowcount == 0:
                 raise sql.errors.Error('Unable to write in database')
-        else:
-            raise requests.HTTPError('Unable to connect to some server')
+        except TypeError:
+            cursor.execute("INSERT INTO geo "
+                           "(uid, country, region, city, gps_geo)"
+                           "VALUES (%s, %s, %s, %s, %s)",
+                           (uid, 'Russia', 'Moscow',
+                            'Moscow',
+                            '55.794551849365234' + ';' + '37.57495880126953'))
+            if cursor.rowcount == 0:
+                raise sql.errors.Error('Unable to write in database')
 
     def _create_rating(self, uid):
         cursor = self.matchadb.cursor()
