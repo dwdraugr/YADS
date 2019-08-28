@@ -8,24 +8,24 @@ class InputInfoForm(FlaskForm):
     first_name = StringField('First Name', [DataRequired(), Length(max=40)])
     last_name = StringField('Last Name', [DataRequired(), Length(max=45)])
     gender = SelectField('gender', choices=[
-        ('ub', 'Undefined'),
-        ('male', 'Male'),
-        ('fem', 'Female'),
-        ('chopper', 'Attack Chopper')
+        ('Undefined', 'Undefined'),
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Attack Chopper', 'Attack Chopper')
     ])
     sex_pref = SelectField('Sexual Preference',
                            choices=[
-                               ('bi', 'Bisexual'),
-                               ('getero', 'Geterosexual'),
-                               ('gomo', 'Gomosexual'),
-                               ('heli', 'Helisexual')
+                               ('Bisexual', 'Bisexual'),
+                               ('Geterosexual', 'Geterosexual'),
+                               ('Gomosexual', 'Gomosexual'),
+                               ('Helisexual', 'Helisexual')
     ])
     tags = SelectMultipleField('Tags', choices=[
-        ('hunting', 'Hunting'),
-        ('fishing', 'Fishing'),
-        ('singing', 'Singing'),
-        ('fuck porcupine', 'Fuck porcupine'),
-        ('razvedopros', 'Watching "Разведопрос"')
+        ('Hunting', 'Hunting'),
+        ('Fishing', 'Fishing'),
+        ('Singing', 'Singing'),
+        ('Fuck porcupine', 'Fuck porcupine'),
+        ('Watching "Разведопрос"', 'Watching "Разведопрос"')
     ])
     age = IntegerField('Age', [DataRequired()])
     biography = TextAreaField('Enter you biography', [DataRequired(),

@@ -1,10 +1,15 @@
 from flask import render_template, url_for, session, redirect, request
+from werkzeug.utils import secure_filename
+
 from app.forms.sign_in_form import SignInForm
 from app.forms.sign_up_form import SignUpForm
 from app.forms.input_info_form import InputInfoForm
+from app.forms.upload_img import UploadImage
 from app.model.auth import Auth
 from app.model.sign_up import SignUp
 from app.model.collect_info import CollectInfo
+from get_user_data import UserData
+from image_exchange import ImageExchange
 
 
 def init(application):
@@ -21,12 +26,30 @@ def init(application):
     @application.route('/')
     def root(message=None, message_type=None):
         if 'id' in session:
-            return render_template('main_page.html', name=session['username'],
-                                   message=message,
-                                   message_type=message_type)
+            return render_template('base.html', name=session['username'])
         else:
-            return render_template('main_page.html', message=message,
-                                   message_type=message_type)
+            return render_template('start_page.html')
+
+    @application.route('/main', methods=['GET'])
+    def main_get():
+        if 'id' in session:
+            upload_form = UploadImage()
+            user = UserData(application).get_data(session['id'])
+            return render_template('profile_page.html', user=user,
+                                   name=session['username'],
+                                   form=upload_form)
+        else:
+            return redirect(url_for('root'))
+
+    @application.route('/main', methods=['POST'])
+    def main_post():
+        if 'id' in session:
+            upload_form = UploadImage()
+            exchange = ImageExchange(application)
+            # if request.files:
+            return request.files['img']
+        else:
+            return redirect(url_for('root'))
 
     @application.route('/sign_in', methods=['GET'])
     def sign_in_get():
@@ -46,6 +69,8 @@ def init(application):
             Auth(application).sign_in(form.username.data, form.password.data)
             if session['full_profile'] == 0:
                 return redirect(url_for('input_info'))
+            else:
+                return redirect(url_for('main_get'))
         else:
             return redirect(url_for('sign_in_get', type='confirmed'))
 
@@ -101,7 +126,7 @@ def init(application):
                     'tags': form.tags.data,
                     'ip': request.remote_addr
                 })
-                return request.form
+                return redirect(url_for('main_get'))
             else:
                 return render_template('input_info.html', form=form,
                                        name=session['username'])

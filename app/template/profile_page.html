@@ -9,12 +9,17 @@
     <div class="col-lg-7">
         <div class="row">
             <div class="col-lg-9">
-                <h2>Firstname Lastname</h2>
-                <p>Attack chopper</p>
-                <p>Gomosexual</p>
-                <p>55 years old</p>
-                <p>Люблю свиней 🐷</p>
-                <p>[a][b][c]</p>
+                <h2>{{user.first_name}} {{ user.last_name }}</h2>
+                <p>{{user.gender}}</p>
+                <p>{{user.sex_pref}}</p>
+                <p>{{user.age}}</p>
+                <p>{{user.biography}}</p>
+                <p>
+                {% for tag in user.tags %}
+                    [{{ tag }}]
+                {% endfor %}
+            </p>
+                        {{ wtf.quick_form(form) }}
             </div>
         </div>
     </div>
