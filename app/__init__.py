@@ -18,13 +18,14 @@ mail_settings = {
 template_dir = os.path.abspath('./app/template')
 application = Flask(__name__, template_folder=template_dir)
 application.config.update(mail_settings)
-
-application.config['UPLOAD_FOLDER'] = '~/py_img'
+application.config['RESIZE_URL'] = 'http://il-a3.21-school.ru:5000/'
+application.config['RESIZE_ROOT'] = '~/py_img'
 
 application.secret_key = 'VERYVERYSECRETKEY'
 application.config['SESSION_TYPE'] = 'redis'
-
 Bootstrap(application)
+
+
 route.init(application)
 # restapi.init(application)
 

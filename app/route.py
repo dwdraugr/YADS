@@ -1,4 +1,8 @@
-from flask import render_template, url_for, session, redirect, request
+import io
+from base64 import b64encode
+
+from flask import render_template, url_for, session, redirect, request, flash, \
+    send_file, make_response
 from werkzeug.utils import secure_filename
 
 from app.forms.sign_in_form import SignInForm
@@ -41,13 +45,23 @@ def init(application):
         else:
             return redirect(url_for('root'))
 
-    @application.route('/main', methods=['POST'])
+    @application.route('/main', methods=['POST'])  # TODO: Вынести в мини-апи
     def main_post():
         if 'id' in session:
             upload_form = UploadImage()
             exchange = ImageExchange(application)
-            # if request.files:
-            return request.files['img']
+            if request.files:
+                f = request.files['img']
+                f.save(secure_filename(f.filename))
+                url = f.filename
+                exchange.upload_img(url, session['id'])
+                flash('WORK!!!!')
+                return secure_filename(request.files['img'].filename)
+            else:
+                return render_template('profile_page.html', form=upload_form,
+                                       user=UserData(application)
+                                       .get_data(session['id']),
+                                       name=session['username'])
         else:
             return redirect(url_for('root'))
 
@@ -133,3 +147,11 @@ def init(application):
         else:
             return render_template('input_info.html', form=form,
                                    name=session['username'])
+
+    @application.route('/test/<int:phid>')  # TODO: Вынести в мини-апи
+    def test(phid: int):
+        exchange = ImageExchange(application)
+        img = exchange.download_img(phid)
+        response = make_response(img)
+        response.headers.set('Content-type', 'image')
+        return response
