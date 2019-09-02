@@ -4,7 +4,7 @@ from base64 import b64encode
 from flask import render_template, url_for, session, redirect, request, flash, \
     send_file, make_response
 from werkzeug.utils import secure_filename
-
+from app.model.search_users import SearchUser
 from app.forms.sign_in_form import SignInForm
 from app.forms.sign_up_form import SignUpForm
 from app.forms.input_info_form import InputInfoForm
@@ -55,7 +55,6 @@ def init(application):
                 f.save(secure_filename(f.filename))
                 url = f.filename
                 exchange.upload_img(url, session['id'])
-                flash('WORK!!!!')
                 return secure_filename(request.files['img'].filename)
             else:
                 return render_template('profile_page.html', form=upload_form,
@@ -147,6 +146,15 @@ def init(application):
         else:
             return render_template('input_info.html', form=form,
                                    name=session['username'])
+
+    @application.route('/search')
+    def search():
+        searchl = SearchUser(application)
+        return {
+            'tags': searchl.search_by_tag('Hunting'),
+            'geo': searchl.search_by_geo(city='Moscow'),
+            'age': searchl.search_by_age(20, 30)
+        }
 
     @application.route('/test/<int:phid>')  # TODO: Вынести в мини-апи
     def test(phid: int):

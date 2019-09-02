@@ -20,6 +20,8 @@ class ImageExchange(Model):
         phid = cursor.lastrowid
         cursor.execute('INSERT INTO photo_compare (uid, phid) VALUES (%s, %s)',
                        (uid, phid))
+        if self._photo_number(uid) == 0:
+            self._change_status(uid, 1)
 
     def download_img(self, phid):
         c = self.matchadb.cursor(dictionary=True)
@@ -44,3 +46,16 @@ class ImageExchange(Model):
         im: Image = Image.open(filename)
         im.thumbnail((640, 480), Image.ANTIALIAS)
         im.save(filename)
+
+    def _photo_number(self, uid) -> int:
+        cursor = self.matchadb.cursor(dictionary=True)
+        cursor.execute("SELECT COUNT(phid) as count FROM photo_compare WHERE "
+                       "uid = %s",
+                       (uid,))
+        result = cursor.fetchone()
+        return result['count']
+
+    def _change_status(self, uid, status):
+        cursor = self.matchadb.cursor()
+        cursor.execute("UPDATE confirmed SET photo_is_available = %s WHERE uid "
+                       "= %s", (status, uid))
