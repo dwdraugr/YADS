@@ -41,7 +41,7 @@ class CollectInfo(Model):
         if cursor.rowcount == 0:
             raise sql.errors.Error('Unable to write in database')
 
-    def _collect_geo_ip(self, uid, ip):  # TODO: Fix TypeError with try
+    def _collect_geo_ip(self, uid, ip):
         request_str = self._get_geo_address(ip)
         response = requests.get(request_str)
         json = response.json()

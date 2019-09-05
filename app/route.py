@@ -14,6 +14,7 @@ from app.model.sign_up import SignUp
 from app.model.collect_info import CollectInfo
 from get_user_data import UserData
 from image_exchange import ImageExchange
+from search import Search
 
 
 def init(application):
@@ -147,14 +148,23 @@ def init(application):
             return render_template('input_info.html', form=form,
                                    name=session['username'])
 
-    @application.route('/search')
-    def search():
-        searchl = SearchUser(application)
-        return {
-            'tags': searchl.search_by_tag('Hunting'),
-            'geo': searchl.search_by_geo(city='Moscow'),
-            'age': searchl.search_by_age(20, 30)
-        }
+    @application.route('/search', methods=['GET'])
+    def search_get():
+        form = Search()
+        return render_template('search.html', form=form)
+
+    @application.route('/search', methods=['POST'])
+    def search_post():
+        form = Search()
+        if form.validate():
+
+            searchl = SearchUser(application)
+            return {
+                'tags': searchl.search_by_tags(tuple(form.tags.data)),
+                'geo': searchl.search_by_geo(city='Moscow'),
+                'age': searchl.search_by_age(form.min_age.data, form.max_age.data),
+                'sex pref': searchl.search_by_gender('Femae')
+            }
 
     @application.route('/test/<int:phid>')  # TODO: Вынести в мини-апи
     def test(phid: int):

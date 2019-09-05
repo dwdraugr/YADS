@@ -1,7 +1,5 @@
 from threading import Thread
 
-from flask import session
-
 
 def lazy_async(f):
     def wrapper(*args, **kwargs):

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block page_content %}
+    {{ super() }}
+<div class="page-header">
+    <h1> Let's go to search somebody for your criteria </h1>
+</div>
+    {% if form %}
+        {{ wtf.quick_form(form) }}
+    {% endif %}
+    {% if users %}
+
+{% endblock %}
