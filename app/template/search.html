@@ -5,9 +5,28 @@
 <div class="page-header">
     <h1> Let's go to search somebody for your criteria </h1>
 </div>
-    {% if form %}
-        {{ wtf.quick_form(form) }}
-    {% endif %}
-    {% if users %}
+{#    {% if form and not users%}#}
+{#        {{ wtf.quick_form(form) }}#}
+{#    {% endif %}#}
+{#    {% if users %}#}
+        <ul class="list-unstyled">
+{#        {% for user in users %}#}
+            <li class="media">
+            <img src="/test/1" class="col-md-2">
+            <div class="media-body">
+                <h5>Biba</h5>
+                This is the biba! I fok u
+            </div>
+            </li>
+            <li class="media">
+            <img src="/test/7" class="col-md-2">
+            <div class="media-body">
+                <h5>Bobo</h5>
+                This is the bobo! I fok u to
+            </div>
+            </li>
+{#        {% endfor %}#}
+        </ul>
+{#    {% endif %}#}
 
 {% endblock %}
