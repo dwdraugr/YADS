@@ -8,6 +8,39 @@ class SearchUser(Model):
         super(SearchUser, self).__init__(app)
         self.cursor = self.matchadb.cursor()
 
+    def search(self, tags: tuple = None, geo: tuple = None, min_age: int = None,
+               max_age: int = None, min_rating: int = None,
+               max_rating: int = None, sex_pref: str = None):
+        data = set()
+        if tags is not None:
+            result = self.search_by_tags(tags)
+            data.update(set(result))
+        if geo is not None:
+            result = self.search_by_geo(geo[0], geo[1], geo[2])
+            if len(result) == 0:
+                data.update(set(result))
+            else:
+                data &= set(result)
+        if min_age and max_age is not None:
+            result = self.search_by_age(min_age, max_age)
+            if len(result) == 0:
+                data.update(set(result))
+            else:
+                data &= set(result)
+        if min_rating and max_rating is not None:
+            result = self.search_by_rating(min_rating, max_rating)
+            if len(result) == 0:
+                data.update(set(result))
+            else:
+                data &= set(result)
+        if sex_pref is not None:
+            result = self.search_by_gender(sex_pref)
+            if len(result) == 0:
+                data.update(set(result))
+            else:
+                data &= set(result)
+        return list(data)
+
     def search_by_tags(self, tags: tuple):
         result = []
         for tag in tags:
@@ -50,8 +83,8 @@ class SearchUser(Model):
             return None
 
     def search_by_rating(self, min_rating, max_rating):
-        self.cursor.execute("SELECT uid FROM ratings WHERE rating >= 40 AND "
-                            "rating <= 300 ORDER BY rating DESC",
+        self.cursor.execute("SELECT uid FROM ratings WHERE rating >= %s AND "
+                            "rating <= %s ORDER BY rating DESC",
                             (min_rating, max_rating))
         if self.cursor.rowcount != 0:
             return [item[0] for item in self.cursor.fetchall()]

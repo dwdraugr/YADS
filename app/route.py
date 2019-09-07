@@ -157,14 +157,20 @@ def init(application):
     def search_post():
         form = Search()
         if form.validate():
-
             searchl = SearchUser(application)
-            return {
-                'tags': searchl.search_by_tags(tuple(form.tags.data)),
-                'geo': searchl.search_by_geo(city='Moscow'),
-                'age': searchl.search_by_age(form.min_age.data, form.max_age.data),
-                'sex pref': searchl.search_by_gender('Femae')
-            }
+            print(searchl.search(tuple(form.tags.data), None, form.min_age.data,
+                                 form.max_age.data, sex_pref='Male'))
+            users = searchl.search(form.tags.data,
+                                   (form.country.data, form.region.data,
+                                    form.city.data),
+                                   form.min_age.data, form.max_age.data,
+                                   form.min_rating.data, form.max_rating.data,
+                                   form.sex_pref.data)
+            users = UserData(application).get_users(users)
+            print(users)
+            return {'dsesfs': users}
+        else:
+            return render_template('search.html', form=form)
 
     @application.route('/test/<int:phid>')  # TODO: Вынести в мини-апи
     def test(phid: int):

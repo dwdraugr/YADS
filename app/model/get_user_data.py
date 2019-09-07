@@ -8,15 +8,22 @@ class UserData(Model):
         super(UserData, self).__init__(app)
         self.cursor = self.matchadb.cursor(dictionary=True)
 
+    def get_users(self, uids):
+        users = list()
+        for uid in uids:
+            aaa = self.get_data(uid)
+            users.append(aaa)
+        return users
+
     def get_data(self, uid):
-        user_data = {
-            **self._get_names(uid),
-            **self._get_options(uid),
-            **self._get_biography(uid),
-            **self._get_geo(uid),
-            **self._get_rating(uid),
-            'tags': self._get_tags(uid)
-        }
+        user_data = dict()
+        user_data.update(self._get_names(uid))
+        user_data.update(self._get_options(uid))
+        user_data.update(self._get_biography(uid))
+        user_data.update(self._get_geo(uid))
+        user_data.update(self._get_rating(uid))
+        user_data['tags'] = self._get_tags(uid)
+        user_data['photos'] = self._get_photos(uid)
         return user_data
 
     def _get_names(self, uid):
@@ -65,13 +72,26 @@ class UserData(Model):
         return data
 
     def _get_tags(self, uid):
-        self.cursor = self.matchadb.cursor()
-        self.cursor.execute("SELECT tag FROM tags WHERE "
-                            "uid = %s",
-                            (uid,))
-        raw_data = self.cursor.fetchall()
-        if self.cursor.rowcount == 0:
-            raise DbError('User not found')
+        cursor = self.matchadb.cursor()
+        cursor.execute("SELECT tag FROM tags WHERE "
+                       "uid = %s",
+                       (uid,))
+        raw_data = cursor.fetchall()
+        if cursor.rowcount == 0:
+            return 'None'
+        data = list()
+        for d in raw_data:
+            data.append(d[0])
+        return data
+
+    def _get_photos(self, uid):
+        cursor = self.matchadb.cursor()
+        cursor.execute("SELECT phid FROM photo_compare WHERE "
+                       "uid = %s",
+                       (uid,))
+        raw_data = cursor.fetchall()
+        if cursor.rowcount == 0:
+            return []
         data = list()
         for d in raw_data:
             data.append(d[0])
