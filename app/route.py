@@ -14,6 +14,8 @@ from app.model.image_exchange import ImageExchange
 from app.model.search_users import SearchUser
 from app.model.sign_up import SignUp
 
+from app.forms.settings import *  # new settings forms added
+
 
 def init(application):
     @application.before_request
@@ -181,10 +183,30 @@ def init(application):
             return render_template('search.html', form=form,
                                    name=session['username'])
 
-    @application.route('/settings')
-    def settings():
-        form = InputInfoForm()
+    @application.route('/settings', methods=['GET'])  # new route for settings page
+    def settings_get():
+        json = dict(request.args)
+        if 'type' in json and json['type'] == 'email':
+            form = SettingsEmailForm()
+        elif 'type' in json and json['type'] == 'password':
+            form = SettingsPasswordForm()
+        else:
+            form = InputInfoForm()
         return render_template('settings.html', form=form)
+
+    @application.route('/settings', methods=['GET', 'POST'])  # new route for settings page
+    def settings_post():
+        json = dict(request.args)
+        if 'type' in json and json['type'] == 'email':
+            form = SettingsEmailForm()
+        elif 'type' in json and json['type'] == 'password':
+            form = SettingsPasswordForm()
+        else:
+            form = InputInfoForm()
+        if form.validate():
+            return
+        else:
+            return render_template('settings.html', form=form)
 
     @application.route('/test/<int:phid>')  # TODO: Вынести в мини-апи
     def test(phid: int):
