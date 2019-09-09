@@ -13,6 +13,7 @@ from app.model.get_user_data import UserData
 from app.model.image_exchange import ImageExchange
 from app.model.search_users import SearchUser
 from app.model.sign_up import SignUp
+from like import Like
 
 
 def init(application):
@@ -188,3 +189,22 @@ def init(application):
         response = make_response(img)
         response.headers.set('Content-type', 'image')
         return response
+
+    @application.route('/user/<int:uid>')
+    def user(uid: int):
+        user = UserData(application).get_data(uid)
+        return render_template('profile_page.html', user=user,
+                               name=session['username'], like='like')
+
+    @application.route('/test_like/<int:uid>', methods=['GET'])
+    def test_like(uid: int):
+        if uid == session['id']:
+            return {'request': 'success', 'like': 'false',
+                    'reason': 'self-like'}, 403
+        if Like(application).add_like(session['id'], uid):
+            return {'request': 'success', 'like': 'true'}
+        else:
+            return "biba"
+
+
+

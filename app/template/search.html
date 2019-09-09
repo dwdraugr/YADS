@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('.static', filename='like_button.js') }}"></script>
+{% endblock %}
 {% block page_content %}
     {{ super() }}
 <div class="page-header">
@@ -28,7 +32,7 @@
                         {% endfor %}
                 </p>
                 <br><br>
-                <a class="btn btn-primary" role="button" href="#"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
+                <a class="btn btn-primary" role="button" id="like-{{ user.id }}" onclick="like_button({{ user.id }})"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
             </div>
             </li>
             {% endif %}
