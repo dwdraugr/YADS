@@ -1,20 +1,18 @@
-import io
-from base64 import b64encode
-
-from flask import render_template, url_for, session, redirect, request, flash, \
-    send_file, make_response
+from flask import render_template, url_for, session, redirect, request, \
+    make_response
 from werkzeug.utils import secure_filename
-from app.model.search_users import SearchUser
+
+from app.forms.input_info_form import InputInfoForm
+from app.forms.search import Search
 from app.forms.sign_in_form import SignInForm
 from app.forms.sign_up_form import SignUpForm
-from app.forms.input_info_form import InputInfoForm
 from app.forms.upload_img import UploadImage
 from app.model.auth import Auth
-from app.model.sign_up import SignUp
 from app.model.collect_info import CollectInfo
 from app.model.get_user_data import UserData
 from app.model.image_exchange import ImageExchange
-from app.forms.search import Search
+from app.model.search_users import SearchUser
+from app.model.sign_up import SignUp
 
 
 def init(application):
@@ -31,7 +29,13 @@ def init(application):
     @application.route('/')
     def root(message=None, message_type=None):
         if 'id' in session:
-            return render_template('base.html', name=session['username'])
+            searchl = SearchUser(application)
+            userdb = UserData(application)
+            user = userdb.get_data(session['id'])
+            users = searchl.preferences(user)
+            users = userdb.get_users(users)
+            return render_template('search.html', name=session['username'],
+                                   users=users)
         else:
             return render_template('start_page.html')
 

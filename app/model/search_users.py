@@ -8,8 +8,15 @@ class SearchUser(Model):
         super(SearchUser, self).__init__(app)
         self.cursor = self.matchadb.cursor()
 
-    def search_preferences(self, user):
+    def preferences(self, user):
         data = set()
+        data.update(self.search_by_tags(user['tags']))
+        data.update(self.search_by_geo(user['city'], user['region'],
+                                       user['country']))
+        data.update(self.search_by_age(0, 200))
+        data.update(self.search_by_rating(0, 4000000))
+        data &= set(self.search_by_gender(user['sex_pref']))
+        return data
 
     def search(self, tags: tuple = None, geo: tuple = None, min_age: int = None,
                max_age: int = None, min_rating: int = None,

@@ -10,7 +10,7 @@ class UserData(Model):
         super(UserData, self).__init__(app)
         self.cursor = self.matchadb.cursor(dictionary=True)
 
-    def get_users(self, uids, sort_age=False, sort_rating=True):
+    def get_users(self, uids, sort_age='False', sort_rating='True'):
         users = list()
         for uid in uids:
             aaa = self.get_data(uid)
