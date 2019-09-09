@@ -177,6 +177,11 @@ def init(application):
             return render_template('search.html', form=form,
                                    name=session['username'])
 
+    @application.route('/settings')
+    def settings():
+        form = InputInfoForm()
+        return render_template('settings.html', form=form)
+
     @application.route('/test/<int:phid>')  # TODO: Вынести в мини-апи
     def test(phid: int):
         exchange = ImageExchange(application)
