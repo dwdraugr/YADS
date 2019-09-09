@@ -4,6 +4,14 @@ from flask_mail import Mail, Message
 
 from app.lazy import lazy_async
 
+all_tags = (
+    'Hunting',
+    'Fishing',
+    'Signing',
+    'Fuck porcupine',
+    'Watching "Разведопрос"'
+)
+
 
 class Model:
     def __init__(self, app: Flask):

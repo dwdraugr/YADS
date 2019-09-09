@@ -12,14 +12,23 @@
         <ul class="list-unstyled">
         {% for user in users %}
             <li class="media">
-            <img src="/test/1" class="col-md-2">
+            <img src="/test/{{ user.photos[0] }}" class="col-md-2">
             <div class="media-body">
-                <h5>Biba</h5>
-                This is the biba! I fok u <br><br>
+                <a href="user/{{ user.id }}"><h5>{{ user.first_name }} {{ user.last_name }}</h5></a>
+                <p>Age: {{ user.age }}</p>
+                <p>{{ user.gender }}, search {{ user.sex_pref }}</p>
+                <p>Location: {{ user.city }}, {{ user.region }}, {{ user.country }}</p>
+                <p>Rating: {{ user.rating }}</p>
+                <p>{{ user.biography }}</p>
+                <p><span class="glyphicon glyphicon-tags"></span>
+                    {% for tag in user.tags %}
+                         {{ [tag] }}
+                        {% endfor %}
+                </p>
+                <br><br>
                 <a class="btn btn-primary" role="button" href="#"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
             </div>
         {% endfor %}
         </ul>
     {% endif %}
-
 {% endblock %}

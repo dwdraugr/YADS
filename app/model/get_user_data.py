@@ -1,6 +1,8 @@
 from flask import Flask
 from app.model.model import Model
 from mysql.connector.errors import Error as DbError
+from operator import itemgetter
+import ast
 
 
 class UserData(Model):
@@ -8,11 +10,15 @@ class UserData(Model):
         super(UserData, self).__init__(app)
         self.cursor = self.matchadb.cursor(dictionary=True)
 
-    def get_users(self, uids):
+    def get_users(self, uids, sort_age=False, sort_rating=True):
         users = list()
         for uid in uids:
             aaa = self.get_data(uid)
             users.append(aaa)
+        sort_age = ast.literal_eval(sort_age)
+        sort_rating = ast.literal_eval(sort_rating)
+        users = sorted(users, key=itemgetter('rating'), reverse=sort_rating)
+        users = sorted(users, key=itemgetter('age'), reverse=sort_age)
         return users
 
     def get_data(self, uid):
@@ -24,6 +30,7 @@ class UserData(Model):
         user_data.update(self._get_rating(uid))
         user_data['tags'] = self._get_tags(uid)
         user_data['photos'] = self._get_photos(uid)
+        user_data['id'] = uid
         return user_data
 
     def _get_names(self, uid):

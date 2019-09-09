@@ -1,27 +1,35 @@
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, SelectField, SelectMultipleField, SubmitField, \
     StringField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Optional
 
 
 class Search(FlaskForm):
-    min_age = IntegerField('From-years')
-    max_age = IntegerField('To-years')
-    min_rating = IntegerField('From-rating')
-    max_rating = IntegerField('To-rating')
-    city = StringField('City')
-    region = StringField('Region')
-    country = StringField('Country')
+    min_age = IntegerField('From-years', validators=[Optional()])
+    max_age = IntegerField('To-years', validators=[Optional()])
+    sort_age = SelectField('Sort by...', choices=[
+        ('False', 'Ascending age'),
+        ('True', 'Descending age')
+    ])
+    min_rating = IntegerField('From-rating', validators=[Optional()])
+    max_rating = IntegerField('To-rating', validators=[Optional()])
+    sort_rating = SelectField('Sort by...', choices=[
+        ('True', 'Descending rating'),
+        ('False', 'Ascending rating')
+    ])
+    city = StringField('City', validators=[Optional()])
+    region = StringField('Region', validators=[Optional()])
+    country = StringField('Country', validators=[Optional()])
     sex_pref = SelectField('Sexual Preference', choices=[
         ('Bisexual', 'Bisexual'),
         ('Male', 'Male'),
         ('Female', 'Female')
-    ])
+    ], validators=[Optional()])
     tags = SelectMultipleField('Tags', choices=[
         ('Hunting', 'Hunting'),
         ('Fishing', 'Fishing'),
         ('Singing', 'Singing'),
         ('Fuck porcupine', 'Fuck porcupine'),
         ('Watching "Разведопрос"', 'Watching "Разведопрос"')
-    ])
+    ], validators=[Optional()])
     submit = SubmitField('Submit', [DataRequired()])

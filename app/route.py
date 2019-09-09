@@ -166,11 +166,16 @@ def init(application):
                                    form.min_age.data, form.max_age.data,
                                    form.min_rating.data, form.max_rating.data,
                                    form.sex_pref.data)
-            users = UserData(application).get_users(users)
+            users = UserData(application).get_users(users, form.sort_age.data,
+                                                    form.sort_rating.data)
             print(users)
-            return {'dsesfs': users}
+            return render_template('search.html', users=users,
+                                   name=session['username'],
+                                   search={'age': form.sort_age.data,
+                                           'rating': form.sort_rating.data})
         else:
-            return render_template('search.html', form=form)
+            return render_template('search.html', form=form,
+                                   name=session['username'])
 
     @application.route('/test/<int:phid>')  # TODO: Вынести в мини-апи
     def test(phid: int):

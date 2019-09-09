@@ -1,6 +1,6 @@
 from flask import Flask
-
-from app.model.model import Model
+import mysql.connector.errors as error
+from app.model.model import Model, all_tags
 
 
 class SearchUser(Model):
@@ -8,12 +8,18 @@ class SearchUser(Model):
         super(SearchUser, self).__init__(app)
         self.cursor = self.matchadb.cursor()
 
+    def search_preferences(self, user):
+        data = set()
+
     def search(self, tags: tuple = None, geo: tuple = None, min_age: int = None,
                max_age: int = None, min_rating: int = None,
                max_rating: int = None, sex_pref: str = None):
         data = set()
-        if tags is not None:
+        if 0 != len(tags):
             result = self.search_by_tags(tags)
+            data.update(set(result))
+        else:
+            result = self.search_by_tags(all_tags)
             data.update(set(result))
         if geo is not None:
             result = self.search_by_geo(geo[0], geo[1], geo[2])
@@ -84,7 +90,7 @@ class SearchUser(Model):
 
     def search_by_rating(self, min_rating, max_rating):
         self.cursor.execute("SELECT uid FROM ratings WHERE rating >= %s AND "
-                            "rating <= %s ORDER BY rating DESC",
+                            "rating <= %s",
                             (min_rating, max_rating))
         if self.cursor.rowcount != 0:
             return [item[0] for item in self.cursor.fetchall()]
