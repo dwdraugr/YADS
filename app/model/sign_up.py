@@ -1,5 +1,5 @@
 from app.lazy import lazy_async
-from model import Model
+from app.model.model import Model
 from flask_mail import Mail, Message
 from flask import request, render_template
 import hashlib, re, random, string

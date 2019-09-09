@@ -1,4 +1,4 @@
-import app.core.model as model
+import app.model.model as model
 import hashlib
 
 

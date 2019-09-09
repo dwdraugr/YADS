@@ -12,9 +12,9 @@ from app.forms.upload_img import UploadImage
 from app.model.auth import Auth
 from app.model.sign_up import SignUp
 from app.model.collect_info import CollectInfo
-from get_user_data import UserData
-from image_exchange import ImageExchange
-from search import Search
+from app.model.get_user_data import UserData
+from app.model.image_exchange import ImageExchange
+from app.forms.search import Search
 
 
 def init(application):
