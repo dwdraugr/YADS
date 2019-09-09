@@ -11,6 +11,8 @@
     {% if users %}
         <ul class="list-unstyled">
         {% for user in users %}
+            {% if not user.photos %}
+            {% else %}
             <li class="media">
             <img src="/test/{{ user.photos[0] }}" class="col-md-2">
             <div class="media-body">
@@ -28,6 +30,8 @@
                 <br><br>
                 <a class="btn btn-primary" role="button" href="#"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
             </div>
+            </li>
+            {% endif %}
         {% endfor %}
         </ul>
     {% endif %}
