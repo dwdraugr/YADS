@@ -1,11 +1,16 @@
-from app.lazy import lazy_async
 from app.model.model import Model
-from flask_mail import Mail, Message
-from flask import request, render_template
+from flask_mail import Message
+from flask import request, render_template, Flask
 import hashlib, re, random, string
+
+from mail_agent import MailAgent
 
 
 class SignUp(Model):
+    def __init__(self, app: Flask):
+        super(SignUp, self).__init__()
+        self.mail = MailAgent(app)
+
     def sign_up(self, username, email, password):
         self._check_email(email)
         self._check_username(username)
@@ -35,7 +40,7 @@ class SignUp(Model):
         msg = Message('Welcome to the YADS!', [email])
         link = request.url_root + 'confirm/new/' + query[1]
         msg.html = render_template('mail_new_account.html', link=link)
-        self._send_mail(msg)
+        self.mail.send_mail(msg)
 
     def _check_email(self, email):
         cursor = self.matchadb.cursor(dictionary=True)

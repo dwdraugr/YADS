@@ -1,6 +1,6 @@
-from flask import Flask, session
+from flask import Flask
 from flask_bootstrap import Bootstrap
-from flask_mail import Mail
+import app.api_route as rest_api
 import app.route as route
 import os
 
@@ -27,7 +27,6 @@ Bootstrap(application)
 
 
 route.init(application)
-# restapi.init(application)
-
+rest_api.init(application)
 if __name__ == '__main__':
     application.run()

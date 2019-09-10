@@ -6,8 +6,8 @@ import ast
 
 
 class UserData(Model):
-    def __init__(self, app: Flask):
-        super(UserData, self).__init__(app)
+    def __init__(self):
+        super(UserData, self).__init__()
         self.cursor = self.matchadb.cursor(dictionary=True)
 
     def get_users(self, uids, sort_age='False', sort_rating='True'):

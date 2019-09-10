@@ -1,12 +1,11 @@
-from flask import Flask
 from PIL import Image
 from app.model.model import Model
 import imghdr
 
 
 class ImageExchange(Model):
-    def __init__(self, app: Flask):
-        super(ImageExchange, self).__init__(app)
+    def __init__(self):
+        super(ImageExchange, self).__init__()
         self.allow_extension = ['gif', 'jpg', 'jpeg', 'png']
 
     def upload_img(self, filename, uid):
@@ -20,7 +19,7 @@ class ImageExchange(Model):
         phid = cursor.lastrowid
         cursor.execute('INSERT INTO photo_compare (uid, phid) VALUES (%s, %s)',
                        (uid, phid))
-        if self._photo_number(uid) == 0:
+        if self._photo_number(uid) > 0:
             self._change_status(uid, 1)
 
     def download_img(self, phid):
