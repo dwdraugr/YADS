@@ -25,5 +25,6 @@ class InputInfoForm(FlaskForm):
         ('Watching "Разведопрос"', 'Watching "Разведопрос"')
     ])
     age = IntegerField('Age', [DataRequired()])
-    biography = TextAreaField('Enter you biography', [DataRequired(), Length(max=1000)])
+    biography = TextAreaField('Enter you biography', [DataRequired(),
+                                                      Length(max=1000)])
     submit = SubmitField('Submit', [DataRequired()])
