@@ -17,3 +17,13 @@ class Like(Model):
             return True
         else:
             return False
+
+    def find_like(self, whoid, whomid):
+        cursor = self.matchadb.cursor()
+        cursor.execute("SELECT * FROM likes WHERE whoid = %s AND whomid = %s",
+                       (whoid, whomid))
+        cursor.fetchone()
+        if cursor.rowcount < 1:
+            return False
+        else:
+            return True

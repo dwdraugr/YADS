@@ -32,7 +32,7 @@
                         {% endfor %}
                 </p>
                 <br><br>
-                <a class="btn btn-primary" role="button" id="like-{{ user.id }}" onclick="like_button({{ user.id }})"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
+                <a class="like-button btn btn-primary" role="button" id="like-{{ user.id }}" onclick="like_button({{ user.id }});"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
             </div>
             </li>
             {% endif %}
