@@ -18,7 +18,7 @@
             {% if not user.photos %}
             {% else %}
             <li class="media">
-            <img src="/test/{{ user.photos[0] }}" class="col-md-2">
+            <img src="/api/v1.0/photo/{{ user.photos[0] }}" class="col-md-2">
             <div class="media-body">
                 <a href="user/{{ user.id }}"><h5>{{ user.first_name }} {{ user.last_name }}</h5></a>
                 <p>Age: {{ user.age }}</p>

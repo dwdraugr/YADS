@@ -6,7 +6,7 @@ from image_exchange import ImageExchange
 
 def init(app):
     api = Api(app)
-    api.add_resource(PhotoApi, '/api/v1.0/<int:phid>/')
+    api.add_resource(PhotoApi, '/api/v1.0/photo/<int:phid>/')
 
 
 class PhotoApi(Resource):
