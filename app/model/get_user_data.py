@@ -6,8 +6,8 @@ import ast
 
 
 class UserData(Model):
-    def __init__(self, app: Flask):
-        super(UserData, self).__init__(app)
+    def __init__(self):
+        super(UserData, self).__init__()
         self.cursor = self.matchadb.cursor(dictionary=True)
 
     def get_users(self, uids, sort_age='False', sort_rating='True'):
@@ -38,7 +38,7 @@ class UserData(Model):
                             "uid = %s",
                             (uid,))
         data = self.cursor.fetchone()
-        if self.cursor.rowcount == 0:
+        if self.cursor.rowcount == -1:
             raise DbError('User not found')
         return data
 
@@ -47,7 +47,7 @@ class UserData(Model):
                             "uid = %s",
                             (uid,))
         data = self.cursor.fetchone()
-        if self.cursor.rowcount == 0:
+        if self.cursor.rowcount == -1:
             raise DbError('User not found')
         return data
 
@@ -56,7 +56,7 @@ class UserData(Model):
                             "uid = %s",
                             (uid,))
         data = self.cursor.fetchone()
-        if self.cursor.rowcount == 0:
+        if self.cursor.rowcount == -1:
             raise DbError('User not found')
         return data
 
@@ -65,7 +65,7 @@ class UserData(Model):
                             "uid = %s",
                             (uid,))
         data = self.cursor.fetchone()
-        if self.cursor.rowcount == 0:
+        if self.cursor.rowcount == -1:
             raise DbError('User not found')
         return data
 
@@ -74,7 +74,7 @@ class UserData(Model):
                             "uid = %s",
                             (uid,))
         data = self.cursor.fetchone()
-        if self.cursor.rowcount == 0:
+        if self.cursor.rowcount == -1:
             raise DbError('User not found')
         return data
 
@@ -84,7 +84,7 @@ class UserData(Model):
                        "uid = %s",
                        (uid,))
         raw_data = cursor.fetchall()
-        if cursor.rowcount == 0:
+        if cursor.rowcount == -1:
             return 'None'
         data = list()
         for d in raw_data:
@@ -97,7 +97,7 @@ class UserData(Model):
                        "uid = %s",
                        (uid,))
         raw_data = cursor.fetchall()
-        if cursor.rowcount == 0:
+        if cursor.rowcount == -1:
             return []
         data = list()
         for d in raw_data:

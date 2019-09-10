@@ -1,1 +1,9 @@
 .idea
+.DS_Store
+app/__pycache/
+app/**/__pycache/
+*.pyc
+*.jpg
+*.jpeg
+*.png
+*.gif

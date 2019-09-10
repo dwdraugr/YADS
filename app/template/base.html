@@ -19,9 +19,9 @@
         </div>
         <nav class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                {% if name %}
+                {% if session['username'] %}
                     <li><a href="/search">Search</a></li>
-                    <li><a href="/main">{{ name }}</a></li>
+                    <li><a href="/main">{{ session['username'] }}</a></li>
                     <li><a href="/settings">Settings</a></li>
                     <li><a href="/sign_out">Sign Out</a></li>
                     {% else %}

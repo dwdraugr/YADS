@@ -4,8 +4,8 @@ from app.model.model import Model, all_tags
 
 
 class SearchUser(Model):
-    def __init__(self, app: Flask):
-        super(SearchUser, self).__init__(app)
+    def __init__(self):
+        super(SearchUser, self).__init__()
         self.cursor = self.matchadb.cursor()
 
     def preferences(self, user):

@@ -13,6 +13,7 @@ from app.model.get_user_data import UserData
 from app.model.image_exchange import ImageExchange
 from app.model.search_users import SearchUser
 from app.model.sign_up import SignUp
+from like import Like
 
 from app.forms.settings import *  # new settings forms added
 
@@ -31,13 +32,16 @@ def init(application):
     @application.route('/')
     def root(message=None, message_type=None):
         if 'id' in session:
-            searchl = SearchUser(application)
-            userdb = UserData(application)
+            searchl = SearchUser()
+            userdb = UserData()
             user = userdb.get_data(session['id'])
             users = searchl.preferences(user)
             users = userdb.get_users(users)
-            return render_template('search.html', name=session['username'],
+            return render_template('search.html', 
                                    users=users)
+        elif message is not None:
+            return render_template('start_page.html', message=message,
+                                   message_type=message_type)
         else:
             return render_template('start_page.html')
 
@@ -45,9 +49,9 @@ def init(application):
     def main_get():
         if 'id' in session:
             upload_form = UploadImage()
-            user = UserData(application).get_data(session['id'])
+            user = UserData().get_data(session['id'])
             return render_template('profile_page.html', user=user,
-                                   name=session['username'],
+                                   
                                    form=upload_form)
         else:
             return redirect(url_for('root'))
@@ -56,7 +60,7 @@ def init(application):
     def main_post():
         if 'id' in session:
             upload_form = UploadImage()
-            exchange = ImageExchange(application)
+            exchange = ImageExchange()
             if request.files:
                 f = request.files['img']
                 f.save(secure_filename(f.filename))
@@ -65,7 +69,7 @@ def init(application):
                 return secure_filename(request.files['img'].filename)
             else:
                 return render_template('profile_page.html', form=upload_form,
-                                       user=UserData(application)
+                                       user=UserData()
                                        .get_data(session['id']),
                                        name=session['username'])
         else:
@@ -86,7 +90,7 @@ def init(application):
     def sign_in_post():
         form = SignInForm()
         if form.validate():
-            Auth(application).sign_in(form.username.data, form.password.data)
+            Auth().sign_in(form.username.data, form.password.data)
             if session['full_profile'] == 0:
                 return redirect(url_for('input_info'))
             else:
@@ -113,14 +117,14 @@ def init(application):
 
     @application.route('/sign_out', methods=['GET'])
     def sign_out():
-        auth = Auth(application)
+        auth = Auth()
         auth.sign_out()
         return redirect('/')
 
     @application.route('/confirm/<string:reason>/<string:seed>')
     def confirm_account(seed, reason='new'):
         if reason == 'new':
-            Auth(application).mail_confirm(seed)
+            Auth().mail_confirm(seed)
             return redirect(url_for('sign_in_get', type='confirmed'))
         else:
             return '<center><h1>BIBU PASASI</h1></center>'
@@ -132,7 +136,7 @@ def init(application):
             return redirect(url_for('sign_in_get'))
         if request.method == 'POST':
             if form.validate():
-                info = CollectInfo(application)
+                info = CollectInfo()
                 print(form.tags.data)
                 print(type(form.tags.data))
                 info.collect_all({
@@ -163,7 +167,7 @@ def init(application):
     def search_post():
         form = Search()
         if form.validate():
-            searchl = SearchUser(application)
+            searchl = SearchUser()
             print(searchl.search(tuple(form.tags.data), None, form.min_age.data,
                                  form.max_age.data, sex_pref='Male'))
             users = searchl.search(form.tags.data,
@@ -172,11 +176,11 @@ def init(application):
                                    form.min_age.data, form.max_age.data,
                                    form.min_rating.data, form.max_rating.data,
                                    form.sex_pref.data)
-            users = UserData(application).get_users(users, form.sort_age.data,
+            users = UserData().get_users(users, form.sort_age.data,
                                                     form.sort_rating.data)
             print(users)
             return render_template('search.html', users=users,
-                                   name=session['username'],
+                                   
                                    search={'age': form.sort_age.data,
                                            'rating': form.sort_rating.data})
         else:
@@ -210,8 +214,27 @@ def init(application):
 
     @application.route('/test/<int:phid>')  # TODO: Вынести в мини-апи
     def test(phid: int):
-        exchange = ImageExchange(application)
+        exchange = ImageExchange()
         img = exchange.download_img(phid)
         response = make_response(img)
         response.headers.set('Content-type', 'image')
         return response
+
+    @application.route('/user/<int:uid>')
+    def user(uid: int):
+        user = UserData().get_data(uid)
+        return render_template('profile_page.html', user=user,
+                                like='like')
+
+    @application.route('/test_like/<int:uid>', methods=['GET'])
+    def test_like(uid: int):
+        if uid == session['id']:
+            return {'request': 'success', 'like': 'false',
+                    'reason': 'self-like'}, 403
+        if Like().add_like(session['id'], uid):
+            return {'request': 'success', 'like': 'true'}
+        else:
+            return "biba"
+
+
+
