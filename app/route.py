@@ -13,9 +13,10 @@ from app.model.get_user_data import UserData
 from app.model.image_exchange import ImageExchange
 from app.model.search_users import SearchUser
 from app.model.sign_up import SignUp
-from like import Like
+from app.model.like import Like
 
 from app.forms.settings import *  # new settings forms added
+from app.model.settings import *  # new settings models added
 
 
 def init(application):
@@ -179,10 +180,8 @@ def init(application):
             users = UserData().get_users(users, form.sort_age.data,
                                                     form.sort_rating.data)
             print(users)
-            return render_template('search.html', users=users,
-                                   
-                                   search={'age': form.sort_age.data,
-                                           'rating': form.sort_rating.data})
+            return render_template('search.html', users=users, search={'age': form.sort_age.data,
+                                                                       'rating': form.sort_rating.data})
         else:
             return render_template('search.html', form=form,
                                    name=session['username'])
@@ -208,7 +207,25 @@ def init(application):
         else:
             form = InputInfoForm()
         if form.validate():
-            return
+            if 'type' in json and json['type'] == 'email':
+                settings = EmailSettings()
+                settings.update_settings(form.new_email.data)
+            elif 'type' in json and json['type'] == 'password':
+                settings = PasswordSettings()
+                settings.update_settings(form.old_password.data, form.new_password.data)
+            else:
+                settings = GeneralSettings()
+                data = {
+                    'first': form.first_name.data,
+                    'last': form.last_name.data,
+                    'gender': form.gender.data,
+                    'sex_pref': form.sex_pref.data,
+                    'age': form.age.data,
+                    'biography': form.biography.data,
+                    'tags': form.tags.data
+                }
+                settings.update_settings(data)
+            return render_template('settings.html', form=form)
         else:
             return render_template('settings.html', form=form)
 
