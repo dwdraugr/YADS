@@ -14,7 +14,7 @@ all_tags = (
 
 
 class Model:
-    def __init__(self, app: Flask):
+    def __init__(self):
         self.matchadb = mysql.connector.connect(
             host="192.168.99.100",
             user="root",
@@ -24,16 +24,6 @@ class Model:
             collation='utf8mb4_unicode_ci',
             autocommit=True
         )
-        self.mail = Mail(app)
-        self.app = app
-
-    @lazy_async
-    def _async_mail(self, msg: Message):
-        with self.app.app_context():
-            self.mail.send(msg)
-
-    def _send_mail(self, msg: Message):
-        self._async_mail(msg)
 
     def _get_geo_address(self, ip):
         return "http://api.ipstack.com/" + ip + "?access_key" \
