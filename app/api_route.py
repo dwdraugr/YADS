@@ -1,6 +1,6 @@
-from flask import make_response, session
+from flask import make_response, session, request
 from flask_restful import Resource, Api
-
+from werkzeug.utils import secure_filename
 from image_exchange import ImageExchange
 from like import Like
 
@@ -19,9 +19,18 @@ class PhotoApi(Resource):
         img = self.exchange.download_img(phid)
         if img is None:
             raise ValueError('Img not found')
-        response = make_response(img)
+        response = make_response(img, 200)
         response.headers.set('Content-type', 'image')
         return response
+
+    def post(self, phid=None):
+        exchange = ImageExchange()
+        if request.files:
+            f = request.files['img']
+            exchange.upload_img(secure_filename(f.filename), session['id'])
+            return {}, 201
+        else:
+            return {}, 415
 
 
 class LikeApi(Resource):
@@ -35,3 +44,23 @@ class LikeApi(Resource):
                 return {}, 200
             else:
                 return {}, 404
+        else:
+            return {}, 403
+
+    def post(self, whomid):
+        if session['id'] == whomid:
+            return {}, 418
+        result = self.like_model.add_like(session['id'], whomid)
+        if result:
+            return {}, 201
+        else:
+            return {}, 403
+
+    def delete(self, whomid):
+        if session['id'] == whomid:
+            return {}, 418
+        result = self.like_model.delete_like(session['id'], whomid)
+        if result:
+            return {}, 204
+        else:
+            return {}, 404

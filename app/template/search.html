@@ -2,7 +2,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% block scripts %}
     {{ super() }}
-    <script src="{{ url_for('.static', filename='like_button.js') }}"></script>
+    <script src="{{ url_for('.static', filename='like_post.js') }}"></script>
 {% endblock %}
 {% block page_content %}
     {{ super() }}
@@ -18,7 +18,7 @@
             {% if not user.photos %}
             {% else %}
             <li class="media">
-            <img src="/api/v1.0/photo/{{ user.photos[0] }}" class="col-md-2">
+            <img src="/api/v1.0/photo/{{ user.photos[0] }}/" class="col-md-2">
             <div class="media-body">
                 <a href="user/{{ user.id }}"><h5>{{ user.first_name }} {{ user.last_name }}</h5></a>
                 <p>Age: {{ user.age }}</p>
@@ -32,7 +32,7 @@
                         {% endfor %}
                 </p>
                 <br><br>
-                <a class="like-button btn btn-primary" role="button" id="like-{{ user.id }}" onclick="like_button({{ user.id }});"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
+                <a class="like-button btn btn-primary" role="button" id="like-{{ user.id }}" onclick="like({{ user.id }});"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
             </div>
             </li>
             {% endif %}

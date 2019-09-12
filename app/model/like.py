@@ -27,3 +27,12 @@ class Like(Model):
             return False
         else:
             return True
+
+    def delete_like(self, whoid, whomid):
+        cursor = self.matchadb.cursor()
+        cursor.execute("DELETE FROM likes WHERE whoid = %s and whomid = %s",
+                       (whoid, whomid))
+        if cursor.rowcount > 0:
+            return True
+        else:
+            return False

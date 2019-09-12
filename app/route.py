@@ -19,6 +19,9 @@ from like import Like
 def init(application):
     @application.before_request
     def before_request():
+        # if 'id' not in session and request.endpoint != 'sign_in_get' \
+        #         != 'sign_in_post' != 'root' != 'sign_up_get' != 'sign_up_post':
+        #     return redirect(url_for('sign_in_get'))
         if 'id' in session and session['full_profile'] == 0 \
                 and request.endpoint != 'input_info':
             if request.endpoint == 'sign_out':
@@ -35,7 +38,7 @@ def init(application):
             user = userdb.get_data(session['id'])
             users = searchl.preferences(user)
             users = userdb.get_users(users)
-            return render_template('search.html', 
+            return render_template('search.html',
                                    users=users)
         elif message is not None:
             return render_template('start_page.html', message=message,
@@ -49,7 +52,7 @@ def init(application):
             upload_form = UploadImage()
             user = UserData().get_data(session['id'])
             return render_template('profile_page.html', user=user,
-                                   
+
                                    form=upload_form)
         else:
             return redirect(url_for('root'))
@@ -175,10 +178,10 @@ def init(application):
                                    form.min_rating.data, form.max_rating.data,
                                    form.sex_pref.data)
             users = UserData().get_users(users, form.sort_age.data,
-                                                    form.sort_rating.data)
+                                         form.sort_rating.data)
             print(users)
             return render_template('search.html', users=users,
-                                   
+
                                    search={'age': form.sort_age.data,
                                            'rating': form.sort_rating.data})
         else:
@@ -197,7 +200,7 @@ def init(application):
     def user(uid: int):
         user = UserData().get_data(uid)
         return render_template('profile_page.html', user=user,
-                                like='like')
+                               like='like')
 
     @application.route('/test_like/<int:uid>', methods=['GET'])
     def test_like(uid: int):
@@ -208,6 +211,3 @@ def init(application):
             return {'request': 'success', 'like': 'true'}
         else:
             return "biba"
-
-
-

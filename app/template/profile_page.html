@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('.static', filename='like_post.js') }}"></script>
+    <script src="{{ url_for('.static', filename='send_photo.js') }}"></script>
+
+{% endblock %}
 {% block page_content %}
     {{ super() }}
     <div class="row">
@@ -23,7 +29,7 @@
               <div class="carousel-inner">
                   {% for i in range(user.photos|length) %}
                       <div class="item {% if i == 0 %}active{% endif %}">
-                        <img src="/api/v1.0/photo/{{ user.photos[i] }}">
+                        <img src="/api/v1.0/photo/{{ user.photos[i] }}/">
                       </div>
                   {% endfor %}
 {#                <div class="item active">#}
@@ -71,10 +77,11 @@
                 {% endfor %}
             </p>
             {% if like %}
-                                <a class="btn btn-primary" role="button" href="#"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
+                <a class="like-button btn btn-primary" role="button" id="like-{{ user.id }}" onclick="like({{ user.id }});"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
             {% endif %}
             {% if form %}
                         {{ wtf.quick_form(form) }}
+                <button class="btn btn-primary" onclick="upload_image()" role="button" id="img_button">Send Photo</button>
             {% endif %}
             </div>
         </div>

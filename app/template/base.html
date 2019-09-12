@@ -4,6 +4,10 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('.static', filename='test.css') }}">
 {% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('.static', filename='notification.js') }}"></script>
+{% endblock %}
 {% block navbar %}
 <div class="navbar navbar-inverse" role="navigation">
     <div class="container">
@@ -34,7 +38,7 @@
 </div>
     {% endblock %}
 {% block content %}
-
+    <div class="container" id="message_box"></div>
     <div class="container">
         {% block page_content %}
             {% if message and message_type %}

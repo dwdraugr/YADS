@@ -16,7 +16,7 @@ all_tags = (
 class Model:
     def __init__(self):
         self.matchadb = mysql.connector.connect(
-            host="192.168.99.100",
+            host="192.168.99.101",
             user="root",
             passwd="qwerty",
             database='matcha',

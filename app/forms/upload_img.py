@@ -11,4 +11,4 @@ class UploadImage(FlaskForm):
     img = FileField('Add Image',
                     validators=[FileRequired(), FileAllowed(images,
                                                             'Images only!')])
-    submit = SubmitField('Upload Image', validators=[DataRequired()])
+
