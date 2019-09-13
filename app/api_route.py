@@ -26,12 +26,11 @@ class PhotoApi(Resource):
         return response
 
     def post(self, phid=None):
-        exchange = ImageExchange()
         if request.files:
             f = request.files['img']
             filename = secure_filename(f.filename)
-            f.save(os.path.join(os.path.abspath('./tmp'), filename))
-            exchange.upload_img(os.path.join(os.path.abspath('./tmp'), filename), session['id'])
+            f.save(os.path.join(os.path.abspath('tmp'), filename))
+            self.exchange.upload_img(os.path.join(os.path.abspath('tmp'), filename), session['id'])
             return {}, 201
         else:
             return {}, 415
