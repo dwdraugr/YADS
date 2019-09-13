@@ -1,3 +1,5 @@
+import os
+
 from PIL import Image
 from app.model.model import Model
 import imghdr
@@ -21,6 +23,7 @@ class ImageExchange(Model):
                        (uid, phid))
         if self._photo_number(uid) > 0:
             self._change_status(uid, 1)
+        self._delete_image(filename)
 
     def download_img(self, phid):
         c = self.matchadb.cursor(dictionary=True)
@@ -58,3 +61,9 @@ class ImageExchange(Model):
         cursor = self.matchadb.cursor()
         cursor.execute("UPDATE confirmed SET photo_is_available = %s WHERE uid "
                        "= %s", (status, uid))
+
+    def _delete_image(self, filename):
+        if os.path.exists(filename):
+            os.remove(filename)
+        else:
+            raise FileNotFoundError('Some internal bullshit')

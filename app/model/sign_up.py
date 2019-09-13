@@ -3,7 +3,7 @@ from flask_mail import Message
 from flask import request, render_template, Flask
 import hashlib, re, random, string
 
-from mail_agent import MailAgent
+from app.model.mail_agent import MailAgent
 
 
 class SignUp(Model):

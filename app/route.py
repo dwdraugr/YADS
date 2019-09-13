@@ -13,7 +13,7 @@ from app.model.get_user_data import UserData
 from app.model.image_exchange import ImageExchange
 from app.model.search_users import SearchUser
 from app.model.sign_up import SignUp
-from like import Like
+from app.model.like import Like
 
 
 def init(application):

@@ -1,8 +1,10 @@
+import os
+
 from flask import make_response, session, request
 from flask_restful import Resource, Api
 from werkzeug.utils import secure_filename
-from image_exchange import ImageExchange
-from like import Like
+from app.model.image_exchange import ImageExchange
+from app.model.like import Like
 
 
 def init(app):
@@ -27,7 +29,9 @@ class PhotoApi(Resource):
         exchange = ImageExchange()
         if request.files:
             f = request.files['img']
-            exchange.upload_img(secure_filename(f.filename), session['id'])
+            filename = secure_filename(f.filename)
+            f.save(os.path.join(os.path.abspath('./tmp'), filename))
+            exchange.upload_img(os.path.join(os.path.abspath('./tmp'), filename), session['id'])
             return {}, 201
         else:
             return {}, 415
