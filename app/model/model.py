@@ -1,8 +1,6 @@
+import os
 import mysql.connector
 from flask import Flask, session
-from flask_mail import Mail, Message
-
-from app.lazy import lazy_async
 
 all_tags = (
     'Hunting',
@@ -16,10 +14,10 @@ all_tags = (
 class Model:
     def __init__(self):
         self.matchadb = mysql.connector.connect(
-            host="172.17.0.2",
-            user="root",
-            passwd="qwerty",
-            database='matcha',
+            host=os.environ['DATABASE_HOST'],
+            user=os.environ['DATABASE_USER'],
+            passwd=os.environ['DATABASE_PASS'],
+            database=os.environ['DATABASE_NAME'],
             charset='utf8mb4',
             collation='utf8mb4_unicode_ci',
             autocommit=True

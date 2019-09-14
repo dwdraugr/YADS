@@ -5,13 +5,13 @@ import app.route as route
 import os
 
 mail_settings = {
-    "MAIL_SERVER": 'smtp.gmail.com',
-    "MAIL_PORT": 587,
+    "MAIL_SERVER": os.environ['MAIL_SERVER'],
+    "MAIL_PORT": os.environ['MAIL_PORT'],
     "MAIL_USE_TLS": True,
     "MAIL_USE_SSL": False,
-    "MAIL_USERNAME": 'kostya.marinenkov@gmail.com',
-    "MAIL_PASSWORD": 'sndmdyhdkugbdfze',
-    "MAIL_DEFAULT_SENDER": 'kostya.marinenkov@gmail.com'
+    "MAIL_USERNAME": os.environ['MAIL_ADDR'],
+    "MAIL_PASSWORD": os.environ['MAIL_PASSWD'],
+    "MAIL_DEFAULT_SENDER": os.environ['MAIL_ADDR']
 }
 
 
