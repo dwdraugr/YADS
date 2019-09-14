@@ -199,7 +199,7 @@ def init(application):
         elif 'type' in json and json['type'] == 'password':
             form = SettingsPasswordForm()
         else:
-            form = InputInfoForm()
+            form = SettingGeneralForm()
         return render_template('settings.html', form=form)
 
     @application.route('/settings', methods=['GET', 'POST'])  # new route for settings page
@@ -210,14 +210,25 @@ def init(application):
         elif 'type' in json and json['type'] == 'password':
             form = SettingsPasswordForm()
         else:
-            form = InputInfoForm()
+            form = SettingGeneralForm()
         if form.validate():
             if 'type' in json and json['type'] == 'email':
                 settings = EmailSettings()
-                settings.update_settings(form.new_email.data)
+                try:
+                    settings.update_settings(form.new_email.data)
+                except NameError as err:
+                    return render_template('settings.html', form=form,
+                                           message=err,
+                                           message_type='alert-danger')
             elif 'type' in json and json['type'] == 'password':
                 settings = PasswordSettings()
-                settings.update_settings(form.old_password.data, form.new_password.data)
+                try:
+                    settings.update_settings(form.old_password.data,
+                                             form.new_password.data)
+                except NameError as err:
+                    return render_template('settings.html', form=form,
+                                           message=err,
+                                           message_type='alert-danger')
             else:
                 settings = GeneralSettings()
                 data = {
