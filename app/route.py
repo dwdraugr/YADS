@@ -15,6 +15,9 @@ from app.model.search_users import SearchUser
 from app.model.sign_up import SignUp
 from app.model.like import Like
 
+from app.forms.settings import *  # new settings forms added
+from app.model.settings import *  # new settings models added
+
 
 def init(application):
     @application.before_request
@@ -188,6 +191,49 @@ def init(application):
             return render_template('search.html', form=form,
                                    name=session['username'])
 
+    @application.route('/settings', methods=['GET'])  # new route for settings page
+    def settings_get():
+        json = dict(request.args)
+        if 'type' in json and json['type'] == 'email':
+            form = SettingsEmailForm()
+        elif 'type' in json and json['type'] == 'password':
+            form = SettingsPasswordForm()
+        else:
+            form = InputInfoForm()
+        return render_template('settings.html', form=form)
+
+    @application.route('/settings', methods=['GET', 'POST'])  # new route for settings page
+    def settings_post():
+        json = dict(request.args)
+        if 'type' in json and json['type'] == 'email':
+            form = SettingsEmailForm()
+        elif 'type' in json and json['type'] == 'password':
+            form = SettingsPasswordForm()
+        else:
+            form = InputInfoForm()
+        if form.validate():
+            if 'type' in json and json['type'] == 'email':
+                settings = EmailSettings()
+                settings.update_settings(form.new_email.data)
+            elif 'type' in json and json['type'] == 'password':
+                settings = PasswordSettings()
+                settings.update_settings(form.old_password.data, form.new_password.data)
+            else:
+                settings = GeneralSettings()
+                data = {
+                    'first': form.first_name.data,
+                    'last': form.last_name.data,
+                    'gender': form.gender.data,
+                    'sex_pref': form.sex_pref.data,
+                    'age': form.age.data,
+                    'biography': form.biography.data,
+                    'tags': form.tags.data
+                }
+                settings.update_settings(data)
+            return render_template('settings.html', form=form)
+        else:
+            return render_template('settings.html', form=form)
+
     @application.route('/test/<int:phid>')  # TODO: Вынести в мини-апи
     def test(phid: int):
         exchange = ImageExchange()
@@ -211,3 +257,6 @@ def init(application):
             return {'request': 'success', 'like': 'true'}
         else:
             return "biba"
+
+
+

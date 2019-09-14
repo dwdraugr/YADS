@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page_content %}
+{{ super() }}
+<div class="btn-group btn-group-justified" role="group" aria-label="...">
+    <a class="btn btn-default" href="/settings" role="button">General</a>
+    <a class="btn btn-default" href="/settings?type=email" role="button">Email</a>
+    <a class="btn btn-default" href="/settings?type=password" role="button">Password</a>
+</div><br>
+{{ wtf.quick_form(form) }}
+{% endblock %}
