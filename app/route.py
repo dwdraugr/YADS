@@ -17,6 +17,7 @@ from app.model.like import Like
 
 from app.forms.settings import *  # new settings forms added
 from app.model.settings import *  # new settings models added
+from app.model.compare_users import CompareUsers
 
 
 def init(application):
@@ -42,7 +43,7 @@ def init(application):
             users = searchl.preferences(user)
             users = userdb.get_users(users)
             return render_template('search.html',
-                                   users=users)
+                                   users=users, d_message='5')
         elif message is not None:
             return render_template('start_page.html', message=message,
                                    message_type=message_type)
@@ -269,5 +270,8 @@ def init(application):
         else:
             return "biba"
 
-
+    @application.route('/dialogs', methods=['GET'])
+    def dialogs_get():
+        comp = CompareUsers()
+        return {'res': comp.get_compare_users(session['id'])}
 

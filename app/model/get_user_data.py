@@ -43,7 +43,7 @@ class UserData(Model):
         return data
 
     def _get_options(self, uid):
-        self.cursor.execute("SELECT gender, sex_pref, age FROM options WHERE "
+        self.cursor.execute("SELECT gender, sex_pref, TIMESTAMPDIFF(year, age, NOW()) as age FROM options WHERE "
                             "uid = %s",
                             (uid,))
         data = self.cursor.fetchone()

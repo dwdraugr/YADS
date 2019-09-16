@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, SelectField, \
-    SelectMultipleField, IntegerField, TextAreaField
+    SelectMultipleField, IntegerField, TextAreaField, DateField
 from wtforms.validators import InputRequired, Length, EqualTo, Regexp
 
 
@@ -39,6 +39,6 @@ class SettingGeneralForm(FlaskForm):
         ('Fuck porcupine', 'Fuck porcupine'),
         ('Watching "Разведопрос"', 'Watching "Разведопрос"')
     ])
-    age = StringField('Age', [Regexp('[0-9]*')])
+    age = DateField('Age (in YYYY-MM-DD)', format='%Y-%m-%d')
     biography = TextAreaField('Enter you biography', [Length(max=1000)])
     submit = SubmitField('Submit')

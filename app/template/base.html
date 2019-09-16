@@ -25,6 +25,9 @@
             <ul class="nav navbar-nav">
                 {% if session['username'] %}
                     <li><a href="/search">Search</a></li>
+                    <li><a href="/dialogs">Dialogs {% if d_message %}
+                        <span class="badge">{{ d_message }}</span>
+                    {% endif %}</a></li>
                     <li><a href="/main">{{ session['username'] }}</a></li>
                     <li><a href="/settings">Settings</a></li>
                     <li><a href="/sign_out">Sign Out</a></li>
