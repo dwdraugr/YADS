@@ -18,6 +18,7 @@ from app.model.like import Like
 from app.forms.settings import *  # new settings forms added
 from app.model.settings import *  # new settings models added
 from app.model.compare_users import CompareUsers
+from app.model.guests import GuestsCheck
 
 
 def init(application):
@@ -257,6 +258,7 @@ def init(application):
     @application.route('/user/<int:uid>')
     def user(uid: int):
         user = UserData().get_data(uid)
+        GuestsCheck().add_guest(session['id'], uid)
         return render_template('profile_page.html', user=user,
                                like='like')
 

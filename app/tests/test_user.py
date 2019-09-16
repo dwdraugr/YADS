@@ -17,7 +17,7 @@ sql_creates['options'] = 'CREATE TABLE IF NOT EXISTS options(' \
                          'uid INT UNIQUE NOT NULL, ' \
                          'gender VARCHAR(30) NOT NULL, ' \
                          'sex_pref VARCHAR(30) NOT NULL, ' \
-                         'age INT NOT NULL);'
+                         'age DATE NOT NULL);'
 sql_creates['biographies'] = 'CREATE TABLE IF NOT EXISTS biographies( ' \
                              'uid INT UNIQUE NOT NULL, ' \
                              'biography VARCHAR(1000) NOT NULL);'
@@ -52,7 +52,8 @@ sql_creates['guests'] = 'CREATE TABLE IF NOT EXISTS guests(' \
                         'id INT AUTO_INCREMENT PRIMARY KEY,' \
                         'whoid INT NOT NULL, ' \
                         'whomid INT NOT NULL, ' \
-                        'guest_date DATE NOT NULL);'
+                        'guest_date DATE NOT NULL,' \
+                        'check_g BOOL NOT NULL DEFAULT FALSE);'
 sql_creates['changes'] = 'CREATE TABLE IF NOT EXISTS changes(' \
                          'id INT AUTO_INCREMENT PRIMARY KEY,' \
                          'uid INT NOT NULL,' \
