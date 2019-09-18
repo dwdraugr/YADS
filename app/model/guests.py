@@ -4,7 +4,8 @@ from app.model.model import Model
 class GuestsCheck(Model):
     def get_guests(self, whomid):
         cursor = self.matchadb.cursor()
-        cursor.execute("SELECT whoid FROM guests WHERE whomid = %s AND check_g = 0",
+        cursor.execute("SELECT whoid FROM guests WHERE whomid = %s AND check_g = 0 ORDER BY \
+                        guest_date DESC",
                        (whomid,))
         guests = [item[0] for item in cursor.fetchall()]
         if len(guests) == 0:

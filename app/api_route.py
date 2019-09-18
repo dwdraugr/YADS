@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from app.model.image_exchange import ImageExchange
 from app.model.like import Like
 from app.model.guests import GuestsCheck
+from app.model.get_user_data import UserData
 
 
 def init(app):
@@ -76,7 +77,13 @@ class GuestApi(Resource):
         self.guest_model = GuestsCheck()
 
     def get(self):
-        return {'a': self.guest_model.get_guests(session['id'])}
+        result = self.guest_model.get_guests(session['id'])
+        if result:
+            users = UserData()
+            result = users.get_users(result)
+            return {'guests': result}
+        else:
+            return {}, 404
 
     def post(self):
         self.guest_model.check_guest(session['id'])
