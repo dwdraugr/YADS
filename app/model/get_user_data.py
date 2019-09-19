@@ -43,9 +43,10 @@ class UserData(Model):
         return data
 
     def _get_options(self, uid):
-        self.cursor.execute("SELECT gender, sex_pref, TIMESTAMPDIFF(year, age, NOW()) as age FROM options WHERE "
-                            "uid = %s",
-                            (uid,))
+        self.cursor.execute(
+            "SELECT gender, sex_pref, TIMESTAMPDIFF(year, age, NOW()) as age FROM options WHERE "
+            "uid = %s",
+            (uid,))
         data = self.cursor.fetchone()
         if self.cursor.rowcount == -1:
             raise DbError('User not found')
@@ -70,13 +71,24 @@ class UserData(Model):
         return data
 
     def _get_rating(self, uid):
-        self.cursor.execute("SELECT rating FROM ratings WHERE "
-                            "uid = %s",
+        data = dict()
+        self.cursor.execute("SELECT full_profile FROM confirmed WHERE uid = %s",
                             (uid,))
-        data = self.cursor.fetchone()
-        if self.cursor.rowcount == -1:
-            raise DbError('User not found')
-        return data
+        if self.cursor.fetchone()['full_profile'] == 0:
+            return 0
+        self.cursor.execute("SELECT COUNT(uid) as count FROM photo_compare "
+                            "WHERE uid = %s",(uid,))
+        data['photos'] = (self.cursor.fetchone()['count'])
+
+        self.cursor.execute("SELECT COUNT(whomid) as count FROM likes WHERE "
+                            "whomid = %s", (uid,))
+        data['likes'] = self.cursor.fetchone()['count']
+
+        self.cursor.execute("SELECT COUNT(whomid) as count FROM guests WHERE "
+                            "whomid = %s", (uid,))
+        data['guests'] = self.cursor.fetchone()['count']
+        rating = data['photos'] * 10 + data['likes'] * 12 + data['guests'] * 7
+        return {'rating': rating}
 
     def _get_tags(self, uid):
         cursor = self.matchadb.cursor()

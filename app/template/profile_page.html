@@ -67,15 +67,16 @@
         <div class="row">
             <div class="col-lg-9">
                 <h2>{{user.first_name}} {{ user.last_name }}</h2>
-                <p>{{user.gender}}</p>
-                <p>{{user.sex_pref}}</p>
-                <p>{{user.age}}</p>
-                <p>{{user.biography}}</p>
-                <p>
-                {% for tag in user.tags %}
-                    [{{ tag }}]
-                {% endfor %}
-            </p>
+                <p>Age: {{ user.age }}</p>
+                <p>{{ user.gender }}, search {{ user.sex_pref }}</p>
+                <p>Location: {{ user.city }}, {{ user.region }}, {{ user.country }}</p>
+                <p>Rating: {{ user.rating }}</p>
+                <p>{{ user.biography }}</p>
+                <p><span class="glyphicon glyphicon-tags"></span>
+                    {% for tag in user.tags %}
+                         {{ [tag] }}
+                        {% endfor %}
+                </p>
             {% if like %}
                 <a class="like-button btn btn-primary" role="button" id="like-{{ user.id }}" onclick="like({{ user.id }});"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
             {% endif %}
