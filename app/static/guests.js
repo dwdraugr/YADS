@@ -6,6 +6,7 @@ function check_guests() {
         if (!(request.status === 200)) {
             alert('biba');
         }
+        location.reload();
     }
 }
 

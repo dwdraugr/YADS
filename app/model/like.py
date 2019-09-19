@@ -4,6 +4,12 @@ from app.model.model import Model
 class Like(Model):
     def add_like(self, whoid, whomid):
         cursor = self.matchadb.cursor()
+        cursor = self.matchadb.cursor()
+        cursor.execute("SELECT COUNT(uid) FROM photo_compare WHERE uid = %s",
+                       (whoid,))
+        num = cursor.fetchone()
+        if num[0] == 0:
+            raise ValueError('No photo - no like')
         cursor.execute("SELECT id FROM users WHERE id = %s", (whomid,))
         cursor.fetchone()
         if cursor.rowcount < 1:
