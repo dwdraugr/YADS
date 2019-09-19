@@ -4,6 +4,11 @@ window.onload = function () {
         like_get(uids[i].id.split('-')[1])
     }
     get_guests();
+    get_likes();
+    setInterval(function () {
+        get_guests();
+        get_likes();
+    }, 10000);
 };
 
 function like(uid) {

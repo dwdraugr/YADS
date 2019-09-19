@@ -13,6 +13,7 @@ def init(app):
     api = Api(app)
     api.add_resource(PhotoApi, '/api/v1.0/photo/<int:phid>/')
     api.add_resource(LikeApi, '/api/v1.0/like/<int:whomid>')
+    api.add_resource(LikeUncheck, '/api/v1.0/like/')
     api.add_resource(GuestApi, '/api/v1.0/guest/')
 
 
@@ -37,6 +38,24 @@ class PhotoApi(Resource):
             return {}, 201
         else:
             return {}, 415
+
+
+class LikeUncheck(Resource):
+    def __init__(self):
+        self.like_model = Like()
+        self.users_model = UserData()
+
+    def get(self):
+        usersid = self.like_model.uncheck_like(session['id'])
+        if usersid:
+            data = self.users_model.get_users(usersid)
+            return {'likes': data}, 200
+        else:
+            return {}, 404
+
+    def post(self):
+        self.like_model.check_like(session['id'])
+        return {}, 200
 
 
 class LikeApi(Resource):
@@ -88,3 +107,10 @@ class GuestApi(Resource):
     def post(self):
         self.guest_model.check_guest(session['id'])
         return {}, 200
+
+
+class BlockApi(Resource):
+    def __init__(self):
+        pass
+
+    def

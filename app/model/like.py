@@ -9,7 +9,7 @@ class Like(Model):
                        "uid = %s",
                        (whoid,))
         num = cursor.fetchone()
-        if num['count'] == 0:
+        if num[0] == 0:
             raise ValueError('No photo - no like')
         cursor.execute("SELECT id FROM users WHERE id = %s", (whomid,))
         cursor.fetchone()
@@ -34,6 +34,17 @@ class Like(Model):
             return False
         else:
             return True
+
+    def uncheck_like(self, whomid):
+        cursor = self.matchadb.cursor()
+        cursor.execute("SELECT whoid FROM likes WHERE check_l = 0 and whomid "
+                       "= %s", (whomid,))
+        return [item[0] for item in cursor.fetchall()]
+
+    def check_like(self, whomid):
+        cursor = self.matchadb.cursor()
+        cursor.execute("UPDATE likes SET check_l = 1 WHERE whomid = %s",
+                       (whomid,))
 
     def delete_like(self, whoid, whomid):
         cursor = self.matchadb.cursor()

@@ -1,6 +1,6 @@
-function check_guests() {
+function check_likes() {
     let request = new XMLHttpRequest;
-    request.open('POST', '/api/v1.0/guest/');
+    request.open('POST', '/api/v1.0/like/');
     request.send();
     request.onreadystatechange = function () {
         if (!(request.status === 200)) {
@@ -11,17 +11,17 @@ function check_guests() {
     }
 }
 
-function get_guests() {
+function get_likes() {
     let request = new XMLHttpRequest;
 
-    request.open('GET', '/api/v1.0/guest/');
+    request.open('GET', '/api/v1.0/like/');
     request.send();
     request.onreadystatechange = function () {
         if (request.status === 200 && request.readyState === 4) {
-            let result = JSON.parse(request.responseText)['guests'];
-            document.getElementById('guest_num')
+            let result = JSON.parse(request.responseText)['likes'];
+            document.getElementById('like_num')
                 .innerText = result.length;
-            fill_window(result)
+            fill_window_l(result)
         }
         else {
             return 0;
@@ -29,11 +29,11 @@ function get_guests() {
     }
 }
 
-function fill_window(users) {
+function fill_window_l(users) {
     JSON.stringify(users);
     let list = document.createElement('li');
     list.className = 'list-group';
-    let modal_body = document.getElementsByClassName('modal-body')[0];
+    let modal_body = document.getElementsByClassName('modal-body')[1];
     modal_body.innerHTML = '';
     for (let i = 0; i < users.length; i++) {
         let img = document.createElement('img');
