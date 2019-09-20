@@ -5,12 +5,14 @@ from flask_restful import Resource, Api
 from werkzeug.utils import secure_filename
 from app.model.image_exchange import ImageExchange
 from app.model.like import Like
+from app.model.message import Message
 
 
 def init(app):
     api = Api(app)
     api.add_resource(PhotoApi, '/api/v1.0/photo/<int:phid>/')
     api.add_resource(LikeApi, '/api/v1.0/like/<int:whomid>')
+    api.add_resource(MessageApi, '/api/v1.0/message/<int:uid>')
 
 
 class PhotoApi(Resource):
@@ -67,3 +69,11 @@ class LikeApi(Resource):
             return {}, 204
         else:
             return {}, 404
+
+
+class MessageApi(Resource):
+    def __init__(self):
+        self.message_model = Message()
+
+    # def get(self, uid):
+    #     if
