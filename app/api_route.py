@@ -7,6 +7,7 @@ from app.model.like import Like
 from app.model.guests import GuestsCheck
 from app.model.get_user_data import UserData
 from app.model.block import Block
+from app.model.online import Online
 
 
 def init(app):
@@ -16,6 +17,7 @@ def init(app):
     api.add_resource(LikeUncheck, '/api/v1.0/like/')
     api.add_resource(GuestApi, '/api/v1.0/guest/')
     api.add_resource(BlockApi, '/api/v1.0/block/<int:whomid>')
+    api.add_resource(OnlineAPi, '/api/v1.0/online/<int:uid>')
 
 
 class PhotoApi(Resource):
@@ -134,3 +136,15 @@ class BlockApi(Resource):
             return {}, 204
         else:
             return {}, 404
+
+
+class OnlineAPi(Resource):
+    def __init__(self):
+        self.online_model = Online()
+
+    def get(self, uid):
+        result = self.online_model.get_online(uid)
+        if result:
+            return {'online': str(result)}, 200
+        else:
+            return {'online': 'Not found'}, 404

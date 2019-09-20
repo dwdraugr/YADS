@@ -42,7 +42,8 @@ sql_creates['tags'] = 'CREATE TABLE IF NOT EXISTS tags(' \
 sql_creates['messages'] = 'CREATE TABLE IF NOT EXISTS messages(' \
                           'id INT AUTO_INCREMENT PRIMARY KEY,' \
                           'text VARCHAR(280) NOT NULL ,' \
-                          'fromid INT NOT NULL ,' \
+                          'sender INT NOT NULL ,' \
+                          'receiver INT NOT NULL ,' \
                           'message_read bool DEFAULT FALSE NOT NULL, ' \
                           'message_date DATETIME NOT NULL );'
 sql_creates['likes'] = 'CREATE TABLE IF NOT EXISTS likes(' \

@@ -14,7 +14,7 @@ from app.model.image_exchange import ImageExchange
 from app.model.search_users import SearchUser
 from app.model.sign_up import SignUp
 from app.model.like import Like
-
+from app.model.online import Online
 from app.forms.settings import *  # new settings forms added
 from app.model.settings import *  # new settings models added
 from app.model.compare_users import CompareUsers
@@ -32,12 +32,14 @@ def init(application):
                 print('bob')
                 return redirect(url_for('input_info'))
         if 'id' not in session \
-            and request.endpoint != 'root' \
-            and request.endpoint != 'sign_in_get' \
-            and request.endpoint != 'sign_in_post' \
-            and request.endpoint != 'sign_up_get' \
-            and request.endpoint != 'sign_up_post':
+                and request.endpoint != 'root' \
+                and request.endpoint != 'sign_in_get' \
+                and request.endpoint != 'sign_in_post' \
+                and request.endpoint != 'sign_up_get' \
+                and request.endpoint != 'sign_up_post':
             return redirect(url_for('sign_in_get'))
+        if 'id' in session:
+            Online().set_online(session['id'])
 
     @application.route('/')
     def root(message=None, message_type=None):
@@ -262,4 +264,3 @@ def init(application):
     def dialogs_get():
         comp = CompareUsers()
         return {'res': comp.get_compare_users(session['id'])}
-

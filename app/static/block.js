@@ -3,6 +3,7 @@ window.onload = function () {
     for (let i = 0; i < uids.length; i++) {
         like_get(uids[i].id.split('-')[1]);
         check_block(uids[i].id.split('-')[1]);
+        get_online(uids[i].id.split('-')[1]);
     }
     get_guests();
     get_likes();

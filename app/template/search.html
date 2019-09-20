@@ -3,6 +3,10 @@
 {% block scripts %}
     {{ super() }}
     <script src="{{ url_for('.static', filename='like_post.js') }}"></script>
+    <script src="{{ url_for('.static', filename='block.js') }}"></script>
+    <script src="{{ url_for('.static', filename='online.js') }}"></script>
+
+
 {% endblock %}
 {% block page_content %}
     {{ super() }}
@@ -21,6 +25,7 @@
             <img src="/api/v1.0/photo/{{ user.photos[0] }}/" class="col-md-2">
             <div class="media-body">
                 <a href="user/{{ user.id }}"><h5>{{ user.first_name }} {{ user.last_name }}</h5></a>
+                <p id="online-{{ user.id }}"></p>
                 <p>Age: {{ user.age }}</p>
                 <p>{{ user.gender }}, search {{ user.sex_pref }}</p>
                 <p>Location: {{ user.city }}, {{ user.region }}, {{ user.country }}</p>
