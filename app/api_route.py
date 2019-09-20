@@ -1,5 +1,4 @@
 import os
-
 from flask import make_response, session, request
 from flask_restful import Resource, Api
 from werkzeug.utils import secure_filename
@@ -7,6 +6,7 @@ from app.model.image_exchange import ImageExchange
 from app.model.like import Like
 from app.model.guests import GuestsCheck
 from app.model.get_user_data import UserData
+from app.model.block import Block
 
 
 def init(app):
@@ -15,6 +15,7 @@ def init(app):
     api.add_resource(LikeApi, '/api/v1.0/like/<int:whomid>')
     api.add_resource(LikeUncheck, '/api/v1.0/like/')
     api.add_resource(GuestApi, '/api/v1.0/guest/')
+    api.add_resource(BlockApi, '/api/v1.0/block/<int:whomid>')
 
 
 class PhotoApi(Resource):
@@ -111,6 +112,25 @@ class GuestApi(Resource):
 
 class BlockApi(Resource):
     def __init__(self):
-        pass
+        self.block_model = Block()
 
-    def
+    def get(self, whomid):
+        result = self.block_model.get_block(session['id'], whomid)
+        if result:
+            return {}, 200
+        else:
+            return {}, 404
+
+    def put(self, whomid):
+        result = self.block_model.block_user(session['id'], whomid)
+        if result:
+            return {}, 200
+        else:
+            return {}, 208
+
+    def delete(self, whomid):
+        result = self.block_model.unblock_user(session['id'], whomid)
+        if result:
+            return {}, 204
+        else:
+            return {}, 404

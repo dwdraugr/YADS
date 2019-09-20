@@ -24,9 +24,6 @@ from app.model.guests import GuestsCheck
 def init(application):
     @application.before_request
     def before_request():
-        # if 'id' not in session and request.endpoint != 'sign_in_get' \
-        #         != 'sign_in_post' != 'root' != 'sign_up_get' != 'sign_up_post':
-        #     return redirect(url_for('sign_in_get'))
         if 'id' in session and session['full_profile'] == 0 \
                 and request.endpoint != 'input_info':
             if request.endpoint == 'sign_out':
@@ -34,6 +31,13 @@ def init(application):
             else:
                 print('bob')
                 return redirect(url_for('input_info'))
+        if 'id' not in session \
+            and request.endpoint != 'root' \
+            and request.endpoint != 'sign_in_get' \
+            and request.endpoint != 'sign_in_post' \
+            and request.endpoint != 'sign_up_get' \
+            and request.endpoint != 'sign_up_post':
+            return redirect(url_for('sign_in_get'))
 
     @application.route('/')
     def root(message=None, message_type=None):
@@ -193,7 +197,7 @@ def init(application):
             return render_template('search.html', form=form,
                                    name=session['username'])
 
-    @application.route('/settings', methods=['GET'])  # new route for settings page
+    @application.route('/settings', methods=['GET'])
     def settings_get():
         json = dict(request.args)
         if 'type' in json and json['type'] == 'email':
@@ -204,7 +208,7 @@ def init(application):
             form = SettingGeneralForm()
         return render_template('settings.html', form=form)
 
-    @application.route('/settings', methods=['GET', 'POST'])  # new route for settings page
+    @application.route('/settings', methods=['GET', 'POST'])
     def settings_post():
         json = dict(request.args)
         if 'type' in json and json['type'] == 'email':
@@ -247,30 +251,12 @@ def init(application):
         else:
             return render_template('settings.html', form=form)
 
-    @application.route('/test/<int:phid>')  # TODO: Вынести в мини-апи
-    def test(phid: int):
-        exchange = ImageExchange()
-        img = exchange.download_img(phid)
-        response = make_response(img)
-        response.headers.set('Content-type', 'image')
-        return response
-
     @application.route('/user/<int:uid>')
     def user(uid: int):
         user = UserData().get_data(uid)
         GuestsCheck().add_guest(session['id'], uid)
         return render_template('profile_page.html', user=user,
                                like='like')
-
-    @application.route('/test_like/<int:uid>', methods=['GET'])
-    def test_like(uid: int):
-        if uid == session['id']:
-            return {'request': 'success', 'like': 'false',
-                    'reason': 'self-like'}, 403
-        if Like().add_like(session['id'], uid):
-            return {'request': 'success', 'like': 'true'}
-        else:
-            return "biba"
 
     @application.route('/dialogs', methods=['GET'])
     def dialogs_get():

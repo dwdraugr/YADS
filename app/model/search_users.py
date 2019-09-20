@@ -16,6 +16,7 @@ class SearchUser(Model):
         data.update(self.search_by_age(0, 200))
         data.update(self.search_by_rating(0, 4000000))
         data &= set(self.search_by_gender(user['sex_pref']))
+        data -= self.search_by_block(user['id'])
         return data
 
     def search(self, tags: tuple = None, geo: tuple = None, min_age: int = None,
@@ -114,3 +115,7 @@ class SearchUser(Model):
             return [item[0] for item in self.cursor.fetchall()]
         else:
             return None
+
+    def search_by_block(self, uid):
+        self.cursor.execute('SELECT whomid FROM block WHERE whoid = %s', (uid,))
+        return set([item[0] for item in self.cursor.fetchall()])

@@ -4,7 +4,7 @@
     {{ super() }}
     <script src="{{ url_for('.static', filename='like_post.js') }}"></script>
     <script src="{{ url_for('.static', filename='send_photo.js') }}"></script>
-
+    <script src="{{ url_for('.static', filename='block.js') }}"></script>
 {% endblock %}
 {% block page_content %}
     {{ super() }}
@@ -83,7 +83,7 @@
                         Bad user! <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu">
-                        <li><a class="btn btn-warning" role="button" id="block-{{ user.id }}" onclick="block({{ user.id }})">Block user</a></li>
+                        <li><a class="btn btn-warning" role="button" id="block" onclick="block({{ user.id }})">Block user</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a class="btn btn-danger" role="button" href="mailto:admin@matcha.com?subject=Report&body=User%20{{ user.id }}%20is%20abuser!%20Kill%20him!">Report</a></li>
                       </ul>

@@ -25,8 +25,8 @@ application.secret_key = 'VERYVERYSECRETKEY'
 application.config['SESSION_TYPE'] = 'redis'
 Bootstrap(application)
 
-
 route.init(application)
 rest_api.init(application)
+
 if __name__ == '__main__':
     application.run()
