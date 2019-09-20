@@ -43,16 +43,15 @@ class SignUp(Model):
         self.mail.send_mail(msg)
 
     def _check_email(self, email):
-        cursor = self.matchadb.cursor(dictionary=True)
+        cursor = self.matchadb.cursor()
         cursor.execute("SELECT id from users WHERE email = %s", (email,))
-        cursor.fetchone()
-        if cursor.rowcount > 0:
+        if cursor.fetchone() is not None:
             raise NameError('User with this email exist')
 
     def _check_username(self, username):
-        cursor = self.matchadb.cursor(dictionary=True)
+        cursor = self.matchadb.cursor()
         cursor.execute("SELECT id FROM users WHERE username = %s", (username,))
         cursor.fetchone()
-        if cursor.rowcount > 0:
+        if cursor.fetchone() is not None:
             raise NameError('User with this username exist')
 
