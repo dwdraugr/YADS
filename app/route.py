@@ -36,6 +36,7 @@ def init(application):
                 and request.endpoint != 'sign_in_get' \
                 and request.endpoint != 'sign_in_post' \
                 and request.endpoint != 'sign_up_get' \
+                and request.endpoint != 'static' \
                 and request.endpoint != 'sign_up_post':
             return redirect(url_for('sign_in_get'))
         if 'id' in session:
