@@ -22,8 +22,9 @@
             {% if not user.photos %}
             {% else %}
             <li class="media">
-            <img src="/api/v1.0/photo/{{ user.photos[0] }}/" class="col-md-2">
-            <div class="media-body">
+            <div class="row" style="background: white; padding: 1em">
+            <img src="/api/v1.0/photo/{{ user.photos[0] }}/" class="col-md-4 col-xs-12">
+            <div class="media-body" style="padding-left: 1.5em">
                 <a href="user/{{ user.id }}"><h5>{{ user.first_name }} {{ user.last_name }}</h5></a>
                 <p id="online-{{ user.id }}"></p>
                 <p>Age: {{ user.age }}</p>
@@ -38,6 +39,7 @@
                 </p>
                 <br><br>
                 <a class="like-button btn btn-primary" role="button" id="like-{{ user.id }}" onclick="like({{ user.id }});"><span class="glyphicon glyphicon-heart" aria-hidden="true"> Like</span></a>
+            </div>
             </div>
             </li>
             {% endif %}
