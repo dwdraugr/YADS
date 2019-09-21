@@ -8,6 +8,7 @@ from app.model.guests import GuestsCheck
 from app.model.get_user_data import UserData
 from app.model.block import Block
 from app.model.online import Online
+from app.model.messages import Messages
 
 
 def init(app):
@@ -18,6 +19,7 @@ def init(app):
     api.add_resource(GuestApi, '/api/v1.0/guest/')
     api.add_resource(BlockApi, '/api/v1.0/block/<int:whomid>')
     api.add_resource(OnlineAPi, '/api/v1.0/online/<int:uid>')
+    api.add_resource(MessageApi, '/api/v1.0/message/<int:uid>')
 
 
 class PhotoApi(Resource):

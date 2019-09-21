@@ -16,7 +16,6 @@ mail_settings = {
     "MAIL_DEFAULT_SENDER": os.environ['MAIL_ADDR']
 }
 
-
 template_dir = os.path.abspath('./app/template')
 application = Flask(__name__, template_folder=template_dir)
 application.config.update(mail_settings)

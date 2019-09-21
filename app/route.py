@@ -1,7 +1,6 @@
 from flask import render_template, url_for, session, redirect, request, \
     make_response
 from werkzeug.utils import secure_filename
-
 from app.forms.input_info_form import InputInfoForm
 from app.forms.search import Search
 from app.forms.sign_in_form import SignInForm
@@ -17,6 +16,8 @@ from app.model.like import Like
 from app.model.online import Online
 from app.forms.settings import *  # new settings forms added
 from app.model.settings import *  # new settings models added
+from app.model.dialogs import Dialogs
+from app.model.messages import Messages
 from app.model.compare_users import CompareUsers
 from app.model.guests import GuestsCheck
 
@@ -261,7 +262,19 @@ def init(application):
         return render_template('profile_page.html', user=user,
                                like='like')
 
-    @application.route('/dialogs', methods=['GET'])
+    @application.route('/dialogs')
+    def dialogs():
+        dialogs = Dialogs()
+        contacts = dialogs.get_contacts()
+        return render_template('dialogs.html', contacts=contacts)
+
+    @application.route('/chat', methods=['GET'])
     def dialogs_get():
-        comp = CompareUsers()
-        return {'res': comp.get_compare_users(session['id'])}
+        get_data = dict(request.args)
+        if 'uid' in get_data and get_data['uid'].isnumeric():
+            interlocutor_id = get_data['uid']
+            messages_model = Messages()
+            my_data, interlocutor_data = messages_model.get_data(interlocutor_id)
+            messages = messages_model.get_messages(interlocutor_id)
+            return render_template('chat.html', my_data=my_data, interlocutor_data=interlocutor_data, messages=messages)
+        return redirect(url_for('dialogs'))
