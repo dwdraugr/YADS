@@ -48,3 +48,13 @@
     width: 0;
     display: none;
 }
+
+.img-circle img
+{
+    border-radius: 50%;
+}
+
+.message-right
+{
+    text-align: right;
+}

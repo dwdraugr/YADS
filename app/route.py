@@ -19,7 +19,7 @@ from app.forms.settings import *  # new settings forms added
 from app.model.settings import *  # new settings models added
 
 from app.model.dialogs import Dialogs
-from app.model.message import Messages
+from app.model.messages import Messages
 from app.model.compare_users import CompareUsers
 
 
@@ -283,8 +283,9 @@ def init(application):
     def dialogs_get():
         get_data = dict(request.args)
         if 'uid' in get_data and get_data['uid'].isnumeric():
-            user_id = get_data['uid']
+            interlocutor_id = get_data['uid']
             messages_model = Messages()
-            messages = messages_model.get_messages(user_id)
-            return render_template('chat.html', messages=messages)
+            my_data, interlocutor_data = messages_model.get_data(interlocutor_id)
+            messages = messages_model.get_messages(interlocutor_id)
+            return render_template('chat.html', my_data=my_data, interlocutor_data=interlocutor_data, messages=messages)
         return redirect(url_for('dialogs'))

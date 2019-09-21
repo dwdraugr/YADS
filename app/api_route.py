@@ -5,7 +5,7 @@ from flask_restful import Resource, Api
 from werkzeug.utils import secure_filename
 from app.model.image_exchange import ImageExchange
 from app.model.like import Like
-from app.model.message import Message
+from app.model.messages import Messages
 
 
 def init(app):
