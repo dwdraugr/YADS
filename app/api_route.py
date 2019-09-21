@@ -19,7 +19,7 @@ def init(app):
     api.add_resource(GuestApi, '/api/v1.0/guest/')
     api.add_resource(BlockApi, '/api/v1.0/block/<int:whomid>')
     api.add_resource(OnlineAPi, '/api/v1.0/online/<int:uid>')
-    api.add_resource(MessageApi, '/api/v1.0/message/<int:uid>')
+    # api.add_resource(MessageApi, '/api/v1.0/message/<int:uid>')
 
 
 class PhotoApi(Resource):

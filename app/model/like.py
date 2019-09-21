@@ -19,8 +19,8 @@ class Like(Model):
                        (whoid, whomid))
         cursor.fetchall()
         if cursor.rowcount <= 0:
-            cursor.execute("INSERT INTO likes (whoid, whomid) VALUES (%s, %s)",
-                           (whoid, whomid))
+            cursor.execute("INSERT INTO likes (whoid, whomid, check_l) VALUES "
+                           "(%s, %s, 0)", (whoid, whomid))
             return True
         else:
             return False

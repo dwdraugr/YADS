@@ -73,7 +73,7 @@ sql_creates['block'] = 'CREATE TABLE IF NOT EXISTS block(' \
                        'whomid INT NOT NULL);'
 
 mydb = mysql.connector.connect(
-    host="192.168.99.100",
+    host="192.168.99.102",
     user="root",
     passwd="qwerty"
 )
