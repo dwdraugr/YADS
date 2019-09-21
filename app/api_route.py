@@ -19,7 +19,7 @@ def init(app):
     api.add_resource(GuestApi, '/api/v1.0/guest/')
     api.add_resource(BlockApi, '/api/v1.0/block/<int:whomid>')
     api.add_resource(OnlineAPi, '/api/v1.0/online/<int:uid>')
-    # api.add_resource(MessageApi, '/api/v1.0/message/<int:uid>')
+    api.add_resource(MessageApi, '/api/v1.0/message/<int:you_id>')
 
 
 class PhotoApi(Resource):
@@ -150,3 +150,25 @@ class OnlineAPi(Resource):
             return {'online': str(result)}, 200
         else:
             return {'online': 'Not found'}, 404
+
+
+class MessageApi(Resource):
+    def __init__(self):
+        self.message_model = Messages()
+
+    def get(self, you_id):
+        result = self.message_model.check_new_messages(session['id'], you_id)
+        if result:
+            for r in result:
+                r['message_date'] = str(r['message_date'])
+            return {'new_messages': result}, 200
+        else:
+            return {}, 404
+
+    def post(self, you_id):
+        result = self.message_model.add_new_message(session['id'], you_id,
+                                                    request.form['message'])
+        if result:
+            return {'id': session['id'], 'message_date': result}, 201
+        else:
+            return {}, 500

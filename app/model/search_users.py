@@ -106,7 +106,7 @@ class SearchUser(Model):
             return None
 
     def search_by_gender(self, sex_pref):
-        if sex_pref != 'Male' or sex_pref != 'Female':
+        if sex_pref == 'Male' or sex_pref == 'Female':
             self.cursor.execute("SELECT uid FROM options WHERE gender = %s",
                                 (sex_pref,))
         else:

@@ -51,7 +51,6 @@ class SignUp(Model):
     def _check_username(self, username):
         cursor = self.matchadb.cursor()
         cursor.execute("SELECT id FROM users WHERE username = %s", (username,))
-        cursor.fetchone()
         if cursor.fetchone() is not None:
             raise NameError('User with this username exist')
 

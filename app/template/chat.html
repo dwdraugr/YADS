@@ -4,24 +4,26 @@
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('.static', filename='chat.css') }}">
 {% endblock %}
+{% block scripts %}
+    {{ super() }}
+        <script src="{{ url_for('.static', filename='chat.js') }}"></script>
+{% endblock %}
 
 {% block page_content %}
 {{ super() }}
+    <img id="{{ my_data['uid'] }}" src="/api/v1.0/photo/{{ my_data['phid'] }}/" class="{{ my_data['first_name'] }} {{ my_data['last_name'] }}" style="display: none">
+    <img id="{{ interlocutor_data['uid'] }}" src="/api/v1.0/photo/{{ interlocutor_data['phid'] }}/" class="{{ interlocutor_data['first_name'] }} {{ interlocutor_data['last_name'] }}" style="display: none">
 <div class="panel-body">
-    <ul class="chat">
+    <ul id="chat" class="chat">
         {% for message in messages %}
         {% if message['sender'] == session['id'] %}
         <li class="right clearfix"><span class="chat-img pull-right">
-            {% if my_data['phid'] != None %}
             <img src="/api/v1.0/photo/{{ my_data['phid'] }}/" class="img-circle" width="64px" height="64px"/>
-            {% else %}
-            <img src="{{ url_for('.static', filename='noimage.png') }}" class="img-circle" width="64px" height="64px"/>
-            {% endif %}
         </span>
             <div class="chat-body clearfix">
                 <div class="header">
                     <small class=" text-muted">
-                        <span class="glyphicon glyphicon-time"></span>13 mins ago
+                        <span class="glyphicon glyphicon-time"></span><span class="message-time">13 mins ago</span>
                     </small>
                     <strong class="pull-right primary-font">Mr Wednesday</strong>
                 </div>
@@ -32,17 +34,13 @@
         </li>
         {% else %}
         <li class="left clearfix"><span class="chat-img pull-left">
-            {% if interlocutor_data['phid'] != None %}
             <img src="/api/v1.0/photo/{{ interlocutor_data['phid'] }}/" class="img-circle" width="64px" height="64px"/>
-            {% else %}
-            <img src="{{ url_for('.static', filename='noimage.png') }}" class="img-circle" width="64px" height="64px"/>
-            {% endif %}
         </span>
             <div class="chat-body clearfix">
                 <div class="header">
                     <strong class="primary-font">Big Boss</strong>
                     <small class="pull-right text-muted">
-                        <span class="glyphicon glyphicon-time"></span>12 mins ago
+                        <span class="glyphicon glyphicon-time"></span><span class="message-time">13 mins ago</span>
                     </small>
                 </div>
                 <p>
@@ -58,32 +56,9 @@
     <div class="input-group">
         <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..."/>
         <span class="input-group-btn">
-            <button class="btn btn-warning btn-sm" id="btn-chat" onclick="send_message()">
+            <button class="btn btn-warning btn-sm" id="btn-chat" onclick="send_message({{ interlocutor_data['uid'] }})">
                 Send</button>
         </span>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-    {{ super() }}
-<script>
-// function send_message(uid) {
-//     let input = document.getElementById('btn-input');
-//     let request = new XMLHttpRequest();
-//     request.open('POST', '/api/v1.0/message/' + uid);
-//     request.send();
-//     request.onreadystatechange = function () {
-//         if (request.status === 201 && request.readyState === 4) {
-//             let jsonchik = JSON.parse(request.responseText);
-//             print_message(jsonchik);
-//         }
-//     }
-// }
-//
-// function print_message(uid) {
-//
-// }
-
-</script>
 {% endblock %}
