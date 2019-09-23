@@ -25,7 +25,7 @@
                     <small class=" text-muted">
                         <span class="glyphicon glyphicon-time"></span><span class="message-time">13 mins ago</span>
                     </small>
-                    <strong class="pull-right primary-font">Mr Wednesday</strong>
+                    <strong class="pull-right primary-font">{{ my_data['first_name'] }}</strong>
                 </div>
                 <p class="message-right">
                     {{ message['text'] }}
@@ -38,7 +38,7 @@
         </span>
             <div class="chat-body clearfix">
                 <div class="header">
-                    <strong class="primary-font">Big Boss</strong>
+                    <strong class="primary-font">{{ interlocutor_data['first_name'] }}</strong>
                     <small class="pull-right text-muted">
                         <span class="glyphicon glyphicon-time"></span><span class="message-time">13 mins ago</span>
                     </small>
