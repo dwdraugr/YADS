@@ -1,0 +1,21 @@
+.list-group-item a
+{
+    height: 100%;
+    text-decoration: none;
+    color: black;
+}
+
+.list-group-item:hover
+{
+    background-color: lightsteelblue;
+}
+
+.media-object
+{
+    border-radius: 50%;
+}
+
+.last-message-badge
+{
+    display: none;
+}

@@ -1,12 +1,20 @@
 {% extends "bootstrap/base.html" %}
 {% block title %}YADS{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% endblock %}
+
 {% block styles %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('.static', filename='test.css') }}">
 {% endblock %}
+
 {% block scripts %}
     {{ super() }}
     <script src="{{ url_for('.static', filename='likes_notification.js') }}"></script>
+    <script src="{{ url_for('.static', filename='dialogs.js') }}"></script>
     <script src="{{ url_for('.static', filename='chat.js') }}"></script>
     <script src="{{ url_for('.static', filename='guests.js') }}"></script>
     <script src="{{ url_for('.static', filename='like_post.js') }}"></script>
@@ -15,6 +23,7 @@
     <script src="{{ url_for('.static', filename='send_photo.js') }}"></script>
     <script src="{{ url_for('.static', filename='delete_photo.js') }}"></script>
 {% endblock %}
+
 {% block navbar %}
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
@@ -87,7 +96,8 @@
   </div>
 </div>
 
-    {% endblock %}
+{% endblock %}
+
 {% block content %}
     <div class="container" id="message_box"></div>
     <div class="container">

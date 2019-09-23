@@ -74,9 +74,10 @@ class Messages(Model):
     def get_last_message(self, my_id, you_id):
         cursor = self.matchadb.cursor(dictionary=True)
         cursor.execute("SELECT text, sender, receiver, message_date "
-                       "FROM messages WHERE sender = %s AND receiver = %s "
+                       "FROM messages WHERE (sender = %s AND receiver = %s) "
+                                        "OR (sender = %s AND receiver = %s) "
                        "ORDER BY message_date DESC",
-                       (you_id, my_id))
+                       (you_id, my_id, my_id, you_id))
         data = cursor.fetchone()
         if data is None:
             return False

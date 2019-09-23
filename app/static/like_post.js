@@ -3,9 +3,13 @@ window.onload = function () {
     for (let i = 0; i < uids.length; i++) {
         like_get(uids[i].id.split('-')[1])
     }
+    uids = document.getElementsByClassName('last-message');
+    for (let i = 0; i < uids.length; i++){
+        get_last_message(uids[i].id.split('-')[1]);
+        get_messages_num(uids[i].id.split('-')[1]);
+    }
     get_guests();
     get_likes();
-    get_new_message();
     get_all_new_message();
     setInterval(function () {
         get_guests();

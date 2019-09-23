@@ -20,6 +20,7 @@ def init(app):
     api.add_resource(BlockApi, '/api/v1.0/block/<int:whomid>')
     api.add_resource(OnlineAPi, '/api/v1.0/online/<int:uid>')
     api.add_resource(MessageApi, '/api/v1.0/message/<int:you_id>')
+    api.add_resource(MessageNonCheckApi, '/api/v1.0/message_non_check/<int:you_id>')
     api.add_resource(MessageNumApi, '/api/v1.0/message/')
     api.add_resource(LastMessageApi, '/api/v1.0/last_message/<int:you_id>')
 
@@ -206,3 +207,18 @@ class MessageApi(Resource):
             return {'id': session['id'], 'message_date': result}, 201
         else:
             return {}, 500
+
+
+class MessageNonCheckApi(Resource):
+    def __init__(self):
+        self.message_model = Messages()
+
+    def get(self, you_id):
+        result = self.message_model.check_new_messages(session['id'],
+                                                       you_id, checker=False)
+        if result:
+            for r in result:
+                r['message_date'] = str(r['message_date'])
+            return {'new_messages': result}, 200
+        else:
+            return {}, 404

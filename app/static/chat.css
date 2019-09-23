@@ -1,3 +1,8 @@
+p
+{
+    word-wrap: break-word;
+}
+
 .chat
 {
     border: #F5F5F5;
@@ -28,6 +33,16 @@
 {
     margin: 0;
     color: #777777;
+}
+
+.pull-right
+{
+    margin-left: 10px;
+}
+
+.pull-left
+{
+    margin-right: 10px;
 }
 
 .panel .glyphicon, .chat .glyphicon

@@ -1,22 +1,25 @@
 {% extends "base.html" %}
 
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('.static', filename='dialogs.css') }}">
+{% endblock %}
+
 {% block page_content %}
     {{ super() }}
     <ul class="list-group">
     {% for contact in contacts %}
-        <li class="list-group-item">
+        <li class="list-group-item"><a href="chat?uid={{ contact['whoid'] }}">
             <div class="media">
                 <div class="media-left">
-                    <a href="chat?uid={{ contact['whoid'] }}">
                     <img class="media-object" src="/api/v1.0/photo/{{ contact['phid'] }}/" width="64px" height="64px" alt="...">
-                    </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading">{{ contact['first_name'] }} {{ contact['last_name'] }}</h4>
-                    Lorem ipsum dolor
+                    <h4 class="media-heading">{{ contact['first_name'] }} {{ contact['last_name'] }} <span id="badge-{{ contact['whoid'] }}" class="badge last-message-badge">2</span></h4>
+                    <p id="message-{{ contact['whoid'] }}" class="last-message"></p>
                 </div>
             </div>
-        </li>
+        </a></li>
     {% endfor %}
     </ul>
 {% endblock %}
