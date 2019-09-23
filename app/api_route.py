@@ -47,6 +47,10 @@ class PhotoApi(Resource):
         else:
             return {}, 415
 
+    def delete(self, phid):
+        self.exchange.delete_image(session['id'], phid)
+        return {}, 204
+
 
 class LikeUncheck(Resource):
     def __init__(self):
