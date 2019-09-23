@@ -20,6 +20,9 @@ def init(app):
     api.add_resource(BlockApi, '/api/v1.0/block/<int:whomid>')
     api.add_resource(OnlineAPi, '/api/v1.0/online/<int:uid>')
     api.add_resource(MessageApi, '/api/v1.0/message/<int:you_id>')
+    api.add_resource(MessageNonCheckApi, '/api/v1.0/message_non_check/<int:you_id>')
+    api.add_resource(MessageNumApi, '/api/v1.0/message/')
+    api.add_resource(LastMessageApi, '/api/v1.0/last_message/<int:you_id>')
 
 
 class PhotoApi(Resource):
@@ -39,7 +42,8 @@ class PhotoApi(Resource):
             f = request.files['img']
             filename = secure_filename(f.filename)
             f.save(os.path.join(os.path.abspath('tmp'), filename))
-            self.exchange.upload_img(os.path.join(os.path.abspath('tmp'), filename), session['id'])
+            self.exchange.upload_img(
+                os.path.join(os.path.abspath('tmp'), filename), session['id'])
             return {}, 201
         else:
             return {}, 415
@@ -152,12 +156,39 @@ class OnlineAPi(Resource):
             return {'online': 'Not found'}, 404
 
 
+class MessageNumApi(Resource):
+    def __init__(self):
+        self.message_model = Messages()
+
+    def get(self):
+        result = self.message_model.check_all_new_message(session['id'])
+        if result:
+            return {'num_message': result[0]['count']}, 200
+        else:
+            return {}, 404
+
+
+class LastMessageApi(Resource):
+    def __init__(self):
+        self.message_model = Messages()
+
+    def get(self, you_id):
+        result = self.message_model.get_last_message(session['id'],
+                                                     you_id)
+        if result:
+            result['message_date'] = str(result['message_date'])
+            return {'new_messages': result}, 200
+        else:
+            return {}, 404
+
+
 class MessageApi(Resource):
     def __init__(self):
         self.message_model = Messages()
 
     def get(self, you_id):
-        result = self.message_model.check_new_messages(session['id'], you_id)
+        result = self.message_model.check_new_messages(session['id'],
+                                                       you_id, checker=True)
         if result:
             for r in result:
                 r['message_date'] = str(r['message_date'])
@@ -172,3 +203,18 @@ class MessageApi(Resource):
             return {'id': session['id'], 'message_date': result}, 201
         else:
             return {}, 500
+
+
+class MessageNonCheckApi(Resource):
+    def __init__(self):
+        self.message_model = Messages()
+
+    def get(self, you_id):
+        result = self.message_model.check_new_messages(session['id'],
+                                                       you_id, checker=False)
+        if result:
+            for r in result:
+                r['message_date'] = str(r['message_date'])
+            return {'new_messages': result}, 200
+        else:
+            return {}, 404

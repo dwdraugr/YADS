@@ -4,8 +4,8 @@ function get_online(uid) {
     request.send();
     let online_status = document.getElementById('online-' + uid);
     request.onreadystatechange = function () {
-        let response = JSON.parse(request.responseText);
         if (request.status === 200 && request.readyState === 4) {
+            let response = JSON.parse(request.responseText);
             if (response['online']  === 'Online') {
                 online_status.innerText = '🌝 ' + response['online'];
             }

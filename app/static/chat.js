@@ -12,6 +12,23 @@ function get_new_message(you_id) {
     }
 }
 
+function get_all_new_message() {
+    let request = new XMLHttpRequest();
+    request.open('GET', '/api/v1.0/message/');
+    request.send();
+    request.onreadystatechange = function () {
+        if (request.status === 200 && request.readyState === 4) {
+            let data = JSON.parse(request.responseText);
+            if (data['num_message'] !== 0)
+                document.getElementById('message_num')
+                    .innerText = data['num_message'];
+            else {
+                return 0
+            }
+        }
+    }
+}
+
 function send_message(you_id) {
     let data = new FormData();
     data.append('message', document.getElementById('btn-input').value);

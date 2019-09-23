@@ -15,8 +15,8 @@
                     <img class="media-object" src="/api/v1.0/photo/{{ contact['phid'] }}/" width="64px" height="64px" alt="...">
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading">{{ contact['first_name'] }} {{ contact['last_name'] }}</h4>
-                    Lorem ipsum dolor
+                    <h4 class="media-heading">{{ contact['first_name'] }} {{ contact['last_name'] }} <span id="badge-{{ contact['whoid'] }}" class="badge last-message-badge">2</span></h4>
+                    <p id="message-{{ contact['whoid'] }}" class="last-message"></p>
                 </div>
             </div>
         </a></li>
