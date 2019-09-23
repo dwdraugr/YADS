@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField, SelectField, \
     SelectMultipleField, IntegerField, TextAreaField, DateField
-from wtforms.validators import InputRequired, Length, EqualTo, Regexp
+from wtforms.validators import InputRequired, Length, EqualTo, Regexp, Optional
 
 
 class SettingsPasswordForm(FlaskForm):
@@ -39,6 +39,7 @@ class SettingGeneralForm(FlaskForm):
         ('Fuck porcupine', 'Fuck porcupine'),
         ('Watching "Разведопрос"', 'Watching "Разведопрос"')
     ])
-    age = DateField('Age (in YYYY-MM-DD)', format='%Y-%m-%d')
+    age = DateField('Age (in YYYY-MM-DD)', format='%Y-%m-%d',
+                    validators=[Optional()])
     biography = TextAreaField('Enter you biography', [Length(max=1000)])
     submit = SubmitField('Submit')

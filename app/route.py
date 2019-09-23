@@ -226,7 +226,7 @@ def init(application):
             if 'type' in json and json['type'] == 'email':
                 settings = EmailSettings()
                 try:
-                    settings.update_settings(form.new_email.data)
+                    message = settings.update_settings(form.new_email.data)
                 except NameError as err:
                     return render_template('settings.html', form=form,
                                            message=err,
@@ -234,7 +234,7 @@ def init(application):
             elif 'type' in json and json['type'] == 'password':
                 settings = PasswordSettings()
                 try:
-                    settings.update_settings(form.old_password.data,
+                    message = settings.update_settings(form.old_password.data,
                                              form.new_password.data)
                 except NameError as err:
                     return render_template('settings.html', form=form,
@@ -251,8 +251,9 @@ def init(application):
                     'biography': form.biography.data,
                     'tags': form.tags.data
                 }
-                settings.update_settings(data)
-            return render_template('settings.html', form=form)
+                message = settings.update_settings(data)
+            return render_template('settings.html', form=form, message=message,
+                                   message_type='alert-success')
         else:
             return render_template('settings.html', form=form)
 
