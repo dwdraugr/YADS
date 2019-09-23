@@ -20,6 +20,7 @@ def init(app):
     api.add_resource(BlockApi, '/api/v1.0/block/<int:whomid>')
     api.add_resource(OnlineAPi, '/api/v1.0/online/<int:uid>')
     api.add_resource(MessageApi, '/api/v1.0/message/<int:you_id>')
+    api.add_resource(MessageNumApi, '/api/v1.0/message/')
 
 
 class PhotoApi(Resource):
@@ -39,7 +40,8 @@ class PhotoApi(Resource):
             f = request.files['img']
             filename = secure_filename(f.filename)
             f.save(os.path.join(os.path.abspath('tmp'), filename))
-            self.exchange.upload_img(os.path.join(os.path.abspath('tmp'), filename), session['id'])
+            self.exchange.upload_img(
+                os.path.join(os.path.abspath('tmp'), filename), session['id'])
             return {}, 201
         else:
             return {}, 415
@@ -152,12 +154,25 @@ class OnlineAPi(Resource):
             return {'online': 'Not found'}, 404
 
 
+class MessageNumApi(Resource):
+    def __init__(self):
+        self.message_model = Messages()
+
+    def get(self):
+        result = self.message_model.check_all_new_message(session['id'])
+        if result:
+            return {'num_message': result[0]['count']}, 200
+        else:
+            return {}, 404
+
+
 class MessageApi(Resource):
     def __init__(self):
         self.message_model = Messages()
 
     def get(self, you_id):
-        result = self.message_model.check_new_messages(session['id'], you_id)
+        result = self.message_model.check_new_messages(session['id'],
+                                                       you_id, checker=True)
         if result:
             for r in result:
                 r['message_date'] = str(r['message_date'])

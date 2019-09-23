@@ -2,10 +2,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% block scripts %}
     {{ super() }}
-    <script src="{{ url_for('.static', filename='like_post.js') }}"></script>
-    <script src="{{ url_for('.static', filename='send_photo.js') }}"></script>
     <script src="{{ url_for('.static', filename='block.js') }}"></script>
-    <script src="{{ url_for('.static', filename='online.js') }}"></script>
 {% endblock %}
 {% block page_content %}
     {{ super() }}

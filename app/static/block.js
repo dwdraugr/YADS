@@ -1,15 +1,17 @@
 window.onload = function () {
     let uids = document.getElementsByClassName('like-button');
     for (let i = 0; i < uids.length; i++) {
-        like_get(uids[i].id.split('-')[1]);
-        check_block(uids[i].id.split('-')[1]);
-        get_online(uids[i].id.split('-')[1]);
+        like_get(uids[i].id.split('-')[1])
     }
     get_guests();
     get_likes();
+    get_new_message();
+    get_all_new_message();
     setInterval(function () {
         get_guests();
         get_likes();
+        get_all_new_message();
+        get_all_new_message();
     }, 10000);
 };
 
@@ -60,7 +62,6 @@ function ublock_user(uid) {
             let block_button = document.getElementById('block');
             block_button.className = 'btn btn-warning';
             block_button.innerText = 'Block user';
-
         }
     }
 }

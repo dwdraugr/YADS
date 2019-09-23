@@ -42,7 +42,7 @@ class Messages(Model):
 
         return my_data, interlocutor_data
 
-    def check_new_messages(self, my_id, you_id):
+    def check_new_messages(self, my_id, you_id, checker=False):
         cursor = self.matchadb.cursor(dictionary=True)
         cursor.execute("SELECT text, sender, receiver, message_date "
                        "FROM messages WHERE sender = %s AND receiver = %s AND "
@@ -51,11 +51,26 @@ class Messages(Model):
         data = cursor.fetchall()
         if cursor.rowcount > 0 is None:
             return False
-        else:
+        elif checker:
             cursor.execute("UPDATE messages SET message_read = TRUE WHERE "
                            "sender = %s AND receiver = %s and message_read = "
                            "FALSE", (you_id, my_id))
             return data
+        else:
+            return data
+
+    def check_all_new_message(self, my_id):
+        cursor = self.matchadb.cursor(dictionary=True)
+        cursor.execute("SELECT COUNT(sender) as count "
+                       "FROM messages WHERE receiver = %s AND "
+                       "message_read = FALSE ORDER BY message_date ASC",
+                       (my_id,))
+        data = cursor.fetchall()
+        if cursor.rowcount > 0 is None:
+            return False
+        else:
+            return data
+
 
     def add_new_message(self, my_id, you_id, message):
         try:
