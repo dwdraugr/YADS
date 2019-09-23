@@ -71,6 +71,17 @@ class Messages(Model):
         else:
             return data
 
+    def get_last_message(self, my_id, you_id):
+        cursor = self.matchadb.cursor(dictionary=True)
+        cursor.execute("SELECT text, sender, receiver, message_date "
+                       "FROM messages WHERE sender = %s AND receiver = %s "
+                       "ORDER BY message_date DESC",
+                       (you_id, my_id))
+        data = cursor.fetchone()
+        if data is None:
+            return False
+        else:
+            return data
 
     def add_new_message(self, my_id, you_id, message):
         try:

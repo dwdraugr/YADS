@@ -21,6 +21,7 @@ def init(app):
     api.add_resource(OnlineAPi, '/api/v1.0/online/<int:uid>')
     api.add_resource(MessageApi, '/api/v1.0/message/<int:you_id>')
     api.add_resource(MessageNumApi, '/api/v1.0/message/')
+    api.add_resource(LastMessageApi, '/api/v1.0/last_message/<int:you_id>')
 
 
 class PhotoApi(Resource):
@@ -162,6 +163,20 @@ class MessageNumApi(Resource):
         result = self.message_model.check_all_new_message(session['id'])
         if result:
             return {'num_message': result[0]['count']}, 200
+        else:
+            return {}, 404
+
+
+class LastMessageApi(Resource):
+    def __init__(self):
+        self.message_model = Messages()
+
+    def get(self, you_id):
+        result = self.message_model.get_last_message(session['id'],
+                                                     you_id)
+        if result:
+            result['message_date'] = str(result['message_date'])
+            return {'new_messages': result}, 200
         else:
             return {}, 404
 
