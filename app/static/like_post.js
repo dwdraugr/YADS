@@ -10,7 +10,9 @@ window.onload = function () {
     }
 
     let objDiv = document.getElementById("scroll");
-    objDiv.scrollTop = objDiv.scrollHeight;
+    if (objDiv) {
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
 
     get_guests();
     get_likes();

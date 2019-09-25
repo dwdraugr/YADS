@@ -46,7 +46,7 @@ function send_message(you_id) {
     request.open('POST', '/api/v1.0/message/' + you_id);
     request.send(data);
     request.onreadystatechange = function () {
-        if (request.status === 201 && request.readyState === 4 && document.getElementById('btn-input').value != '') {
+        if (request.status === 201 && request.readyState === 4 && document.getElementById('btn-input').value.trim() != '') {
             let resp = JSON.parse(request.responseText);
             generate_my_message({
                 'sender': resp['id'],
@@ -58,7 +58,9 @@ function send_message(you_id) {
             document.getElementById("btn-input").value = "";
 
             let objDiv = document.getElementById("scroll");
-            objDiv.scrollTop = objDiv.scrollHeight;
+            if (objDiv) {
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }
         }
     }
 }
