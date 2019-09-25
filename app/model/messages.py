@@ -6,7 +6,7 @@ from mysql.connector import Error as DbError
 class Messages(Model):
     def get_messages(self, interlocutor_id):
         cursor = self.matchadb.cursor(dictionary=True)
-        cursor.execute("SELECT text, sender, receiver, message_date "
+        cursor.execute("SELECT id, text, sender, receiver, message_date "
                        "FROM messages WHERE (sender = %s AND receiver = %s) "
                        "OR (sender = %s AND receiver = %s) "
                        "ORDER BY message_date ASC",

@@ -1,3 +1,13 @@
+let input = document.getElementById("btn-input");
+if (input) {
+    input.addEventListener("keyup", function(event) {
+      if (event.keyCode == 13) {
+       event.preventDefault();
+       document.getElementById("btn-chat").click();
+      }
+    });
+}
+
 function get_new_message(you_id) {
     let request = new XMLHttpRequest();
     request.open('GET', '/api/v1.0/message/' + you_id);
@@ -36,7 +46,7 @@ function send_message(you_id) {
     request.open('POST', '/api/v1.0/message/' + you_id);
     request.send(data);
     request.onreadystatechange = function () {
-        if (request.status === 201 && request.readyState === 4) {
+        if (request.status === 201 && request.readyState === 4 && document.getElementById('btn-input').value != '') {
             let resp = JSON.parse(request.responseText);
             generate_my_message({
                 'sender': resp['id'],
@@ -44,8 +54,12 @@ function send_message(you_id) {
                 'message_date': resp['message_date'],
                 'text': document.getElementById('btn-input').value
             });
-        }
 
+            document.getElementById("btn-input").value = "";
+
+            let objDiv = document.getElementById("scroll");
+            objDiv.scrollTop = objDiv.scrollHeight;
+        }
     }
 }
 
@@ -66,7 +80,7 @@ function generate_your_message(json_message) {
     glyph.className = 'glyphicon glyphicon-time';
     let message_time = document.createElement('span');
     message_time.className = 'message-time';
-    message_time.innerText = json_message['message_date'];
+    message_time.innerText = moment.utc(json_message['message_date']).local().fromNow();
     let small = document.createElement('small');
     small.className = 'pull-right text-muted';
     small.appendChild(glyph);
@@ -106,7 +120,7 @@ function generate_my_message(json_message) {
     glyph.className = 'glyphicon glyphicon-time';
     let message_time = document.createElement('span');
     message_time.className = 'message-time';
-    message_time.innerText = json_message['message_date'];
+    message_time.innerText = moment.utc(json_message['message_date']).local().fromNow();
     let small = document.createElement('small');
     small.className = ' text-muted';
     small.appendChild(glyph);

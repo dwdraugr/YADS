@@ -5,12 +5,16 @@
 <link rel="stylesheet" href="{{ url_for('.static', filename='chat.css') }}">
 {% endblock %}
 
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
+{% endblock %}
 
 {% block page_content %}
 {{ super() }}
-    <img id="{{ my_data['uid'] }}" src="/api/v1.0/photo/{{ my_data['phid'] }}/" class="{{ my_data['first_name'] }} {{ my_data['last_name'] }}" style="display: none">
-    <img id="{{ interlocutor_data['uid'] }}" src="/api/v1.0/photo/{{ interlocutor_data['phid'] }}/" class="{{ interlocutor_data['first_name'] }} {{ interlocutor_data['last_name'] }}" style="display: none">
-<div class="panel-body">
+    <img id="{{ my_data['uid'] }}" src="/api/v1.0/photo/{{ my_data['phid'] }}/" class="{{ my_data['first_name'] }}" style="display: none">
+    <img id="{{ interlocutor_data['uid'] }}" src="/api/v1.0/photo/{{ interlocutor_data['phid'] }}/" class="{{ interlocutor_data['first_name'] }}" style="display: none">
+<div id="scroll" class="panel-body">
     <ul id="chat" class="chat">
         {% for message in messages %}
         {% if message['sender'] == session['id'] %}
@@ -20,7 +24,7 @@
             <div class="chat-body clearfix">
                 <div class="header">
                     <small class=" text-muted">
-                        <span class="glyphicon glyphicon-time"></span><span class="message-time">13 mins ago</span>
+                        <span class="glyphicon glyphicon-time"></span><span class="message-time">{{ moment(message['message_date']).fromNow() }}</span>
                     </small>
                     <strong class="pull-right primary-font">{{ my_data['first_name'] }}</strong>
                 </div>
@@ -37,7 +41,7 @@
                 <div class="header">
                     <strong class="primary-font">{{ interlocutor_data['first_name'] }}</strong>
                     <small class="pull-right text-muted">
-                        <span class="glyphicon glyphicon-time"></span><span class="message-time">13 mins ago</span>
+                        <span class="glyphicon glyphicon-time"></span><span class="message-time">{{ moment(message['message_date']).fromNow() }}</span>
                     </small>
                 </div>
                 <p>

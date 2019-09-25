@@ -8,6 +8,10 @@ window.onload = function () {
         get_last_message(uids[i].id.split('-')[1]);
         get_messages_num(uids[i].id.split('-')[1]);
     }
+
+    let objDiv = document.getElementById("scroll");
+    objDiv.scrollTop = objDiv.scrollHeight;
+
     get_guests();
     get_likes();
     get_all_new_message();

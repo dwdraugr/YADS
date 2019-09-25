@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_moment import Moment
 from flask_bootstrap import Bootstrap
 import app.api_route as rest_api
 import app.route as route
@@ -25,6 +26,8 @@ application.config['RESIZE_ROOT'] = '~/py_img'
 application.secret_key = 'VERYVERYSECRETKEY'
 application.config['SESSION_TYPE'] = 'redis'
 Bootstrap(application)
+
+moment = Moment(application)
 
 route.init(application)
 rest_api.init(application)
