@@ -38,9 +38,9 @@ class Model:
                 profile = session['full_profile']
             if photo == -1:
                 photo = session['photo_is_available']
-            cursor.execute("UPDATE confirmed SET"
-                           "confirm_email = %s, full_profile = %s,"
-                           "photo_is_available = %s WHERE uid = %s",
+            cursor.execute("UPDATE confirmed SET "
+                           "confirm_email = %s, full_profile = %s, "
+                           "photo_is_available = %s WHERE uid = %s ",
                            (email, profile, photo, session['id']))
             if cursor.rowcount == 0:
                 raise NameError('Incorrect request: uid is unavailable')

@@ -46,7 +46,7 @@ class ImageExchange(Model):
 
     def _thumbnail(self, filename: str):
         im: Image = Image.open(filename)
-        im.thumbnail((640, 480), Image.ANTIALIAS)
+        im = im.resize((640, 480))
         im.save(filename)
 
     def _photo_number(self, uid) -> int:
@@ -67,3 +67,13 @@ class ImageExchange(Model):
             os.remove(filename)
         else:
             raise FileNotFoundError('Some internal bullshit')
+
+    def delete_image(self, uid, phid):
+        cursor = self.matchadb.cursor(dictionary=True)
+        cursor.execute("DELETE FROM photo_data WHERE id = %s", (phid,))
+        cursor.execute("DELETE FROM photo_compare WHERE phid = %s", (phid,))
+        cursor.execute("SELECT COUNT(uid) as count FROM photo_compare WHERE "
+                       "uid = %s", (uid,))
+        result = cursor.fetchone()
+        if result['count'] == 0:
+            self.change_status(photo=0)
