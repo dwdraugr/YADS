@@ -15,7 +15,7 @@ def init(app):
     api = Api(app)
     api.add_resource(PhotoApi, '/api/v1.0/photo/<int:phid>/')
     api.add_resource(LikeApi, '/api/v1.0/like/<int:whomid>')
-    api.add_resource(LikeUncheck, '/api/v1.0/like/')
+    api.add_resource(LikeUncheckApi, '/api/v1.0/like/')
     api.add_resource(GuestApi, '/api/v1.0/guest/')
     api.add_resource(BlockApi, '/api/v1.0/block/<int:whomid>')
     api.add_resource(OnlineAPi, '/api/v1.0/online/<int:uid>')
@@ -46,14 +46,14 @@ class PhotoApi(Resource):
                 os.path.join(os.path.abspath('tmp'), filename), session['id'])
             return {}, 201
         else:
-            return {}, 415
+            return {}, 203
 
     def delete(self, phid):
         self.exchange.delete_image(session['id'], phid)
         return {}, 204
 
 
-class LikeUncheck(Resource):
+class LikeUncheckApi(Resource):
     def __init__(self):
         self.like_model = Like()
         self.users_model = UserData()
@@ -64,7 +64,7 @@ class LikeUncheck(Resource):
             data = self.users_model.get_users(usersid)
             return {'likes': data}, 200
         else:
-            return {}, 404
+            return {}, 204
 
     def post(self):
         self.like_model.check_like(session['id'])
@@ -81,9 +81,9 @@ class LikeApi(Resource):
             if result:
                 return {}, 200
             else:
-                return {}, 404
+                return {}, 204
         else:
-            return {}, 403
+            return {}, 203
 
     def post(self, whomid):
         if session['id'] == whomid:
@@ -92,16 +92,16 @@ class LikeApi(Resource):
         if result:
             return {}, 201
         else:
-            return {}, 403
+            return {}, 203
 
     def delete(self, whomid):
         if session['id'] == whomid:
             return {}, 418
         result = self.like_model.delete_like(session['id'], whomid)
         if result:
-            return {}, 204
+            return {}, 200
         else:
-            return {}, 404
+            return {}, 204
 
 
 class GuestApi(Resource):
@@ -115,7 +115,7 @@ class GuestApi(Resource):
             result = users.get_users(result)
             return {'guests': result}
         else:
-            return {}, 404
+            return {}, 204
 
     def post(self):
         self.guest_model.check_guest(session['id'])
@@ -131,7 +131,7 @@ class BlockApi(Resource):
         if result:
             return {}, 200
         else:
-            return {}, 404
+            return {}, 204
 
     def put(self, whomid):
         result = self.block_model.block_user(session['id'], whomid)
@@ -145,7 +145,7 @@ class BlockApi(Resource):
         if result:
             return {}, 204
         else:
-            return {}, 404
+            return {}, 204
 
 
 class OnlineAPi(Resource):
@@ -157,7 +157,7 @@ class OnlineAPi(Resource):
         if result:
             return {'online': str(result)}, 200
         else:
-            return {'online': 'Not found'}, 404
+            return {'online': 'Not found'}, 204
 
 
 class MessageNumApi(Resource):
@@ -169,7 +169,7 @@ class MessageNumApi(Resource):
         if result:
             return {'num_message': result[0]['count']}, 200
         else:
-            return {}, 404
+            return {}, 204
 
 
 class LastMessageApi(Resource):
@@ -183,7 +183,7 @@ class LastMessageApi(Resource):
             result['message_date'] = str(result['message_date'])
             return {'new_messages': result}, 200
         else:
-            return {}, 404
+            return {}, 204
 
 
 class MessageApi(Resource):
@@ -198,7 +198,7 @@ class MessageApi(Resource):
                 r['message_date'] = str(r['message_date'])
             return {'new_messages': result}, 200
         else:
-            return {}, 404
+            return {}, 204
 
     def post(self, you_id):
         result = self.message_model.add_new_message(session['id'], you_id,
@@ -206,7 +206,7 @@ class MessageApi(Resource):
         if result:
             return {'id': session['id'], 'message_date': result}, 201
         else:
-            return {}, 500
+            return {}, 204
 
 
 class MessageNonCheckApi(Resource):
@@ -221,4 +221,4 @@ class MessageNonCheckApi(Resource):
                 r['message_date'] = str(r['message_date'])
             return {'new_messages': result}, 200
         else:
-            return {}, 404
+            return {}, 204

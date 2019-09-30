@@ -18,6 +18,10 @@ function get_new_message(you_id) {
             for (let i = 0; i < data['new_messages'].length; i++) {
                 generate_your_message(data['new_messages'][i])
             }
+            let objDiv = document.getElementById("scroll");
+            if (objDiv) {
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }
         }
     }
 }

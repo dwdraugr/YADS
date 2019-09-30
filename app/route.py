@@ -1,5 +1,6 @@
 from flask import render_template, url_for, session, redirect, request, \
     make_response
+import re
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from app.forms.input_info_form import InputInfoForm
@@ -33,6 +34,8 @@ def init(application):
             else:
                 print('bob')
                 return redirect(url_for('input_info'))
+        elif 'id' not in session and re.search(r"[\S]+api$", request.endpoint):
+            return {}, 204
         if 'id' not in session \
                 and request.endpoint != 'root' \
                 and request.endpoint != 'sign_in_get' \
@@ -216,6 +219,7 @@ def init(application):
 
     @application.route('/settings', methods=['GET', 'POST'])
     def settings_post():
+        message = ''
         json = dict(request.args)
         if 'type' in json and json['type'] == 'email':
             form = SettingsEmailForm()
@@ -236,7 +240,7 @@ def init(application):
                 settings = PasswordSettings()
                 try:
                     message = settings.update_settings(form.old_password.data,
-                                             form.new_password.data)
+                                                       form.new_password.data)
                 except NameError as err:
                     return render_template('settings.html', form=form,
                                            message=err,

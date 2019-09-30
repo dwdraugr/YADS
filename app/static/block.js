@@ -5,12 +5,10 @@ window.onload = function () {
     }
     get_guests();
     get_likes();
-    get_new_message();
     get_all_new_message();
     setInterval(function () {
         get_guests();
         get_likes();
-        get_all_new_message();
         get_all_new_message();
     }, 10000);
 };

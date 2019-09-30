@@ -7,13 +7,20 @@
 
 {% block scripts %}
 {{ super() }}
+        <script src="{{ url_for('.static', filename='likes_notification.js') }}"></script>
+    <script>
+        setInterval(function () {
+            let imgs = document.getElementsByClassName('ppp')[0];
+            get_new_message(imgs.id);
+        }, 1000)
+    </script>
 {{ moment.include_moment() }}
 {% endblock %}
 
 {% block page_content %}
 {{ super() }}
     <img id="{{ my_data['uid'] }}" src="/api/v1.0/photo/{{ my_data['phid'] }}/" class="{{ my_data['first_name'] }}" style="display: none">
-    <img id="{{ interlocutor_data['uid'] }}" src="/api/v1.0/photo/{{ interlocutor_data['phid'] }}/" class="{{ interlocutor_data['first_name'] }}" style="display: none">
+    <img id="{{ interlocutor_data['uid'] }}" src="/api/v1.0/photo/{{ interlocutor_data['phid'] }}/" class="{{ interlocutor_data['first_name'] }} ppp" style="display: none">
 <div id="scroll" class="panel-body">
     <ul id="chat" class="chat">
         {% for message in messages %}

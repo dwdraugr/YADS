@@ -42,8 +42,9 @@ function like_post(uid) {
             let btn = document.getElementById('like-' + uid);
             btn.className = 'like-button btn btn-warning';
         }
-        else {
-            alert('Лайк не встал')
+        else  {
+            notification('alert-info','Oh my lovely narcissist 😘');
+            request.onreadystatechange = null;
         }
     };
 }
@@ -68,12 +69,13 @@ function like_del(uid) {
     request.open('DELETE', '/api/v1.0/like/' + uid);
     request.send();
     request.onreadystatechange = function () {
-        if (request.status === 204) {
+        if (request.status === 200) {
             let btn = document.getElementById('like-' + uid);
             btn.className = 'like-button btn btn-primary';
         }
         else {
-            alert('Ты чэ дурак? Удаляет неудаляемое он. Пидр')
+            notification('alert-danger','Ты чэ дурак? Удаляет неудаляемое он. Пидр');
+            request.onreadystatechange = null;
         }
     }
 }

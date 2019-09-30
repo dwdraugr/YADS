@@ -105,6 +105,7 @@ class EmailSettings(Model):
         cursor = self.matchadb.cursor()
         cursor.execute("UPDATE users SET email = %s WHERE id = %s",
                        (new_email, session['id']))
+        return 'Email change successfully'
 
     def _check_emails_match(self, new_email):
         cursor = self.matchadb.cursor(dictionary=True)
@@ -127,6 +128,7 @@ class PasswordSettings(Model):
         cursor.execute(
             "UPDATE users SET password = %s WHERE password = %s AND id = %s",
             (new_password, old_password, session['id']))
+        return 'Password change successfully'
 
     def _check_old_password(self, old_password):
         cursor = self.matchadb.cursor(dictionary=True)
