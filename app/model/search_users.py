@@ -88,9 +88,8 @@ class SearchUser(Model):
         return None
 
     def search_by_age(self, min_age, max_age):
-        self.cursor.execute("SELECT uid FROM options WHERE age >= %s AND age "
-                            "<= %s",
-                            (min_age, max_age))
+        self.cursor.execute("SELECT uid FROM options WHERE YEAR(age) >= YEAR(DATE_SUB(NOW(), INTERVAL %s YEAR )) AND YEAR(age) <= YEAR(DATE_SUB(NOW(), INTERVAL %s YEAR ))",
+                            (max_age, min_age))
         if self.cursor.rowcount != 0:
             return [item[0] for item in self.cursor.fetchall()]
         else:

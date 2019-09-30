@@ -95,7 +95,11 @@ function generate_your_message(json_message) {
     small.appendChild(message_time);
     let strong = document.createElement('strong');
     strong.className = 'primary-front';
-    strong.innerText = document.getElementById(json_message['receiver']).className;
+    strong.innerText = '';
+    biba_text = document.getElementById(json_message['sender']).className.split(' ');
+    for (let i = 0; i < biba_text.length - 1; i++) {
+        strong.innerText += biba_text[i] + ' ' ;
+    }
     let inner_div = document.createElement('div');
     inner_div.className = 'header';
     inner_div.appendChild(strong);

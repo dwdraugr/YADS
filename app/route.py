@@ -27,6 +27,10 @@ from app.model.guests import GuestsCheck
 def init(application):
     @application.before_request
     def before_request():
+        # if 'id' not in session and re.search(r"[\S]+api$", request.endpoint):
+        #     return {}, 204
+        # if 'id' in session and re.search(r"[\S]+api$", request.endpoint):
+        #     return {}, 204
         if 'id' in session and session['full_profile'] == 0 \
                 and request.endpoint != 'input_info':
             if request.endpoint == 'sign_out':
@@ -34,8 +38,6 @@ def init(application):
             else:
                 print('bob')
                 return redirect(url_for('input_info'))
-        elif 'id' not in session and re.search(r"[\S]+api$", request.endpoint):
-            return {}, 204
         if 'id' not in session \
                 and request.endpoint != 'root' \
                 and request.endpoint != 'sign_in_get' \

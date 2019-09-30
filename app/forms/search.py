@@ -1,12 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, SelectField, SelectMultipleField, SubmitField, \
     StringField
-from wtforms.validators import DataRequired, Optional
+from wtforms.validators import DataRequired, Optional, NumberRange
 
 
 class Search(FlaskForm):
-    min_age = IntegerField('From-years', validators=[Optional()])
-    max_age = IntegerField('To-years', validators=[Optional()])
+    min_age = IntegerField('From-years', validators=[Optional(), NumberRange(0, 1000, 'Too big or too small number')])
+    max_age = IntegerField('To-years', validators=[Optional(), NumberRange(0, 1000, 'Too big or too small number')])
     sort_age = SelectField('Sort by...', choices=[
         ('False', 'Ascending age'),
         ('True', 'Descending age')

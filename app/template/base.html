@@ -10,9 +10,9 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('.static', filename='test.css') }}">
 {% endblock %}
-
 {% block scripts %}
     {{ super() }}
+    {% if session and 'id' in session %}
     <script src="{{ url_for('.static', filename='likes_notification.js') }}"></script>
     <script src="{{ url_for('.static', filename='dialogs.js') }}"></script>
     <script src="{{ url_for('.static', filename='chat.js') }}"></script>
@@ -23,6 +23,7 @@
     <script src="{{ url_for('.static', filename='send_photo.js') }}"></script>
     <script src="{{ url_for('.static', filename='delete_photo.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    {% endif %}
 {% endblock %}
 
 {% block navbar %}
